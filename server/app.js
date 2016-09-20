@@ -13,6 +13,7 @@ app.get('/', function(req,res){
     console.log("/ accessed");
 });
 
+
 io.on('connection', function(socket){
   socket.on('event', function (data) {
     console.log(data);
