@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Rover
+    link(rel='stylesheet', href='stylesheets/foundation.css')
+    link(rel='stylesheet', href='stylesheets/app.css')
+  body.main_page
+    include ./includes/header.jade
+    block content
+    include ./includes/footer.jade

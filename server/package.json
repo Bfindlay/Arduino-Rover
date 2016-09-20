@@ -1,0 +1,21 @@
+{
+  "name": "arduino-robot",
+  "version": "0.0.0",
+  "description": "websocket controlled arduino robot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "arduino",
+    "websocket",
+    "robot"
+  ],
+  "author": "Brett Findlay",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "jade": "^1.11.0",
+    "socket.io": "^1.4.8"
+  }
+}
