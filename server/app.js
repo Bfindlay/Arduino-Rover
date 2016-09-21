@@ -9,10 +9,13 @@ let io = require('socket.io')(servers);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req,res){
+    console.log("/accessed");
     res.sendFile(__dirname + '/public/index.html');
-    console.log("/ accessed");
+    
 });
-
+app.get('/api', function(req,res){
+  res.send("hello api");
+})
 
 io.on('connection', function(socket){
   socket.on('event', function (data) {
