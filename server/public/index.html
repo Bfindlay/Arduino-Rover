@@ -1,11 +1,34 @@
-<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+ <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.3/p5.js"></script>
-<script src="javascripts/socket.js"></script>
-
+ <script src="javascripts/socket.js"></script>
+-->
 <style>
     button{
         disply:'inline';
     }
  </style>
+
+ <html>
+
+	<body>
+	
+	<!-- in the <button> tags below the ID attribute is the value sent to the arduino -->
+	
+	<button id="11" class="led">Toggle Pin 11</button> <!-- button for pin 11 -->
+	<button id="12" class="led">Toggle Pin 12</button> <!-- button for pin 12 -->
+	<button id="13" class="led">Toggle Pin 13</button> < <!-- button for pin 13 -->
+      
+   <script src="javascripts/jquery.min.js"></script>
+  <script type="text/javascript">
+		$(document).ready(function(){
+			$(".led").click(function(){
+				var p = $(this).attr('id'); // get id value (i.e. pin13, pin12, or pin11)
+				// send HTTP GET request to the IP address with the parameter "pin" and value "p", then execute the function
+				$.get("192.168.4.1:80/", {pin:p}); // execute get request
+			});
+		});
+	</script>
+	</body>
+
 <input type='button' onclick='sendLeft()'>Left</input>
 <input type='button' onclick='sendRight()'>Right</input>
