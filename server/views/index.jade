@@ -1,15 +1,17 @@
 extends layout
 block content 
     .row
-        .small-12.large-12.columns
+        .small-12.large-5.columns.contain
+            .secondary-flex
+                .terminal-Logs
+                    ul
+        .small-12.large-7.columns.contain
             .main-flex
-                
-        .small-12.large-6.columns
-            .terminal-flex
-                .terminal
-                    p.prompt The page you requested cannot be found right meow. Try typing 'kittens'.
-                    p.prompt.output.new-output
-        .small-12.large-6.columns
+        .small-12.large-6.columns.contain
+            .terminal-flex 
+                .text-editor.wrap
+                    .terminal
+        .small-12.large-6.columns.contain
             .main-flex
                 div
                 a(onclick='left()')
@@ -23,8 +25,5 @@ block content
                 div
                  a(onclick='right()')
                     span.right
-            a.secondary.button(onclick='connect()') Connect
-            a.secondary.button(onclick='refreshLogs()') Refresh Logs
-            a.secondary.button(onclick='refreshMap()') Refresh Map
-
+    a(class="success button" onclick='connect()') Connect
       

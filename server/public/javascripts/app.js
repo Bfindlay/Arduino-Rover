@@ -1,64 +1,82 @@
-
+var logs = [];
 $(function(){
-      $(".terminal").typed({
-        strings: ["Waiting for rover connection"],
-        typeSpeed: 2
-      });
-  });
+      $('.terminal').typeIt({
+     strings: ['Initialising rover uplink','Rover uplink connection failed','please establish a connection to the rover'],
+     speed: 50,
+    });
+});
 
 
 var connect = function(){
-    console.log("connecting");
-     $(".terminal").typed({
-        strings: ["Establishing uplink connection to rover ","......" ,"uplink failed"],
+     $('.terminal').typeIt({
+        strings: ["Establishing uplink connection to rover ","Initialising .........." ,"uplink failed"],
         typeSpeed: 2
       });
+      addLog();
 };
 
 var refreshLogs = function(){
-    console.log('refreshing logs');
-    $(".terminal").typed({
+    $(".terminal").typeIt({
         strings: ["Refreshing logs", "please wait"],
         typeSpeed: 2
       });
+      logs = [];
 };
 
 var refreshMap = function(){
-    console.log('refreshing map');
-    $(".terminal").typed({
+    $('.terminal').typeIt({
         strings: ["Refreshing Map", "please wait"],
         typeSpeed: 2
       });
+      addLog();
 }
 
 var left = function(){
-    console.log('left');
-    $(".terminal").typed({
-         strings: ["Sending left turn command", "waiting for response from rover", "Success"],
+    addLog();
+    var strings =  ["Sending left turn command", "waiting for rover response", "failed"];
+    $('.terminal').typeIt({
+         strings: strings,
         typeSpeed: 2
       });
-}
+      logs.push(strings);
+      
+};
 
 var right = function(){
-    console.log('right');
-    $(".terminal").typed({
-         strings: ["Sending right turn command", "waiting for response from rover", "Success"],
-        typeSpeed: 2
+    var strings = ["Sending right turn command", "waiting for rover response", "failed"];
+    addLog();
+    $('.terminal').typeIt({
+         strings: strings,
+        typeSpeed: 1
       });
+      logs.push(strings);
+
 }
 
 var forwards = function(){
-    console.log('forwards');
-    $(".terminal").typed({
-        strings: ["Sending drive command", "waiting for response from rover", "Success"],
-        typeSpeed: 2
+     addLog();
+     var strings = ["Sending drive command", "waiting for rover response", "failed"];
+    $('.terminal').typeIt({
+        strings: strings,
+        typeSpeed: 10
       });
+      logs.push(strings);
+      
 }
 
 var reverse = function(){
-    console.log('rreverse');
-    $(".terminal").typed({
-        strings: ["Sending reverse command", "waiting for response from rover", "Success"],
+     addLog();
+     var strings = ["Sending reverse command", "waiting for rover response", "failed"];
+    $('.terminal').typeIt({
+        strings: strings,
         typeSpeed: 2
       });
+      logs.push(strings);
 }
+
+var addLog = function(){
+    if(logs.length > 0){
+        $("ul").append("<li> >" +logs.pop()+"</li>");
+       $('.terminal-Logs').animate({scrollTop: $('.terminal-Logs').prop("scrollHeight")}, 500);
+    }
+};

@@ -5,30 +5,67 @@ body{
   -o-background-size: cover;
   background-size: cover;
 }
-.buttonCenter{
-    margin:auto;
-}
+
 .main-flex{
     display: flex;
-    display: flex;
     height: 40vh;
-     background-color: rgba(75, 75, 75, 0.4);
+    background-color: rgba(75, 75, 75, 0.4);
     padding: 10px;
     color: #f0f0f0;
     text-shadow: #000 0px 1px 0px;
     margin: 0.5em;
     padding: 5em;
     z-index:1;
+    overflow: hidden;
+}
+.secondary-flex{
+    display: flex;
+    height: 40vh;
+    background-color: rgba(75, 75, 75, 0.4);
+    padding: 10px;
+    color: #f0f0f0;
+    text-shadow: #000 0px 1px 0px;
+    margin: 0.5em;
+    z-index:1;
+    text-align: left;
+    overflow: auto;
+
 }
 .terminal-flex{
-    display: flex;
+    width: 35vw;
     display: flex;
     height: 40vh;
     background-color: lightgrey;
     margin: 0.5em;
     z-index:1;
    background-color: rgba(75, 75, 75, 0.4);
+   overflow: hidden;
 }
+@media (max-width: 800px) {
+  .terminal-flex {
+    width: 85vw;
+  }
+}
+.terminal-Logs{
+    white-space: normal; 
+    list-style: none;
+  color: #1ff042;
+   font-family: 'AndaleMono', monospace;
+   margin-bottom: 20px;
+   overflow: hidden;
+}
+li{
+    list-style: none;
+   color: #1ff042;
+   font-family: 'AndaleMono', monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.6em;
+  letter-spacing: 0.15em;
+  white-space: pre-wrap;
+  text-shadow: 0 0 2px rgba(31, 240, 66, 0.75);
+}
+
 
 /****** TYPED *****/
 
@@ -152,9 +189,9 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
 /******* MESSAGE BOX *******/
 
 .terminal {
-  position: relative;
+
   padding: 4rem;
-   color: #1ff042;
+  color: #1ff042;
    font-family: 'AndaleMono', monospace;
   font-weight: bold;
   text-transform: uppercase;
@@ -164,5 +201,22 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   text-shadow: 0 0 2px rgba(31, 240, 66, 0.75);
   line-height: 1;
   margin-bottom: 0.75em;
+  margin-top: 4em;
+   text-align: left;
+    overflow: hidden;
 }
 
+.text-editor-wrap {
+    display: block;
+    margin: auto;
+    max-width: 530px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0px 20px 70px;
+    clear: both;
+    overflow: hidden;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+}
