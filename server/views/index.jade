@@ -1,6 +1,30 @@
 extends layout
 block content 
-    script(src="https://cdn.socket.io/socket.io-1.4.5.js")
-    script.
-        var socket = io.connect();
-    script(src="javascripts/socket.js")
+    .row
+        .small-12.large-12.columns
+            .main-flex
+                
+        .small-12.large-6.columns
+            .terminal-flex
+                .terminal
+                    p.prompt The page you requested cannot be found right meow. Try typing 'kittens'.
+                    p.prompt.output.new-output
+        .small-12.large-6.columns
+            .main-flex
+                div
+                a(onclick='left()')
+                    span.left
+                div
+                 a(onclick='forwards()')
+                    span.top
+                div
+                 a(onclick='reverse()')
+                    span.bottom
+                div
+                 a(onclick='right()')
+                    span.right
+            a.secondary.button(onclick='connect()') Connect
+            a.secondary.button(onclick='refreshLogs()') Refresh Logs
+            a.secondary.button(onclick='refreshMap()') Refresh Map
+
+      

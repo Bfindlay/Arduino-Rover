@@ -2,11 +2,16 @@
 
 let express = require('express')
 var app = express();
+var path = require('path');
 let servers = require('http').Server(app);
 let io = require('socket.io')(servers);
-
+var home = require('./routes/home');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 app.use(express.static(__dirname + '/public'));
+
+app.use('/mission-control', home);
 
 app.get('/', function(req,res){
     console.log("/accessed");

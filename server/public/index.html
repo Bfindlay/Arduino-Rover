@@ -12,22 +12,18 @@
 
 	<body>
 	
-	<!-- in the <button> tags below the ID attribute is the value sent to the arduino -->
+<div id="" class="textarea white_bkgd inspace-content-02">
+  <div class="inner">
+    <div class="space-hand-wrap"><img class="img-space-hand animate hand-hover" src="../../assets/img/duo-in-space/space-hand_@2x.png"></div>
+
+<div class="nasa-phone-wrap"><img class="img-nasa-phone animate phone-hover" src="../../assets/img/duo-in-space/nasa-phone_@2x.png"></div>
+
+  </div>
 	
-	<button id="11" class="led">Toggle Pin 11</button> <!-- button for pin 11 -->
-	<button id="12" class="led">Toggle Pin 12</button> <!-- button for pin 12 -->
-	<button id="13" class="led">Toggle Pin 13</button> < <!-- button for pin 13 -->
-      
-   <script src="javascripts/jquery.min.js"></script>
-  <script type="text/javascript">
-		$(document).ready(function(){
-			$(".led").click(function(){
-				var p = $(this).attr('id'); // get id value (i.e. pin13, pin12, or pin11)
-				// send HTTP GET request to the IP address with the parameter "pin" and value "p", then execute the function
-				$.get("192.168.4.1:80/", {pin:p}); // execute get request
-			});
-		});
-	</script>
+	
+
+
+
 	</body>
 
 <input type='button' onclick='sendLeft()'>Left</input>

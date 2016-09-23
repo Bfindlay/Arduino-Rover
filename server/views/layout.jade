@@ -9,6 +9,9 @@ html
     link(rel='stylesheet', href='stylesheets/foundation.css')
     link(rel='stylesheet', href='stylesheets/app.css')
   body.main_page
-    include ./includes/header.jade
     block content
-    include ./includes/footer.jade
+    script(src='javascripts/vendor/jquery.js')
+    script(src='javascripts/vendor/foundation.min.js')
+    script(src='javascripts/typed.js')
+    script(src='javascripts/app.js')
+        
