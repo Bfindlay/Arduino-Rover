@@ -42,7 +42,7 @@ serialport.on('open', function(){
       });
       socket.on('data', function (data) {
         console.log("got data", data);
-        serialport.write('H');
+        serialport.write(data);
       });
   });
 });
