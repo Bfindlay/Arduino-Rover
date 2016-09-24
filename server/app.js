@@ -1,33 +1,62 @@
 'use strict';
-
 let express = require('express')
 var app = express();
 var path = require('path');
 let servers = require('http').Server(app);
 let io = require('socket.io')(servers);
-var home = require('./routes/home');
+let home = require('./routes/home');
+let api = require('./routes/api');
+let SerialPort = require("serialport").SerialPort;
+
+let portConfig = {
+         baudRate: 9600
+     }
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(express.static(__dirname + '/public'));
 
-app.use('/mission-control', home);
+app.use('/', home);
+app.use('/api', api);
 
-app.get('/', function(req,res){
-    console.log("/accessed");
-    res.sendFile(__dirname + '/public/index.html');
-    
-});
-app.get('/api', function(req,res){
-  res.send("hello api");
-})
 
-io.on('connection', function(socket){
-  socket.on('event', function (data) {
-    console.log(data);
-    io.emit('update', { up: true });
+
+/*** SERIAL PORT CONNECTION */
+
+var serialport = new SerialPort("/dev/cu.usbmodem1411", portConfig); // replace this address with your port address
+serialport.on('open', function(){
+  // Now server is connected to Arduino
+  console.log('Serial Port Opend');
+
+  var lastValue;
+  io.sockets.on('connection', function (socket) {
+      //Connecting to client 
+      console.log('Socket connected');
+      socket.emit('connected');
+      var lastValue;
+
+      serialport.on('data', function(data){
+              console.log("Received",data.toString('utf8'));
+              //socket.emit('data', data);
+         
+      });
+      socket.on('data', function (data) {
+        console.log("got data", data);
+        serialport.write('H');
+      });
   });
 });
+
+
+
+// io.on('connection', function(socket){
+//   console.log("got a connection!");
+//   socket.on('event', function (data) {
+//     console.log("got an event!");
+//     console.log(data);
+//     io.emit('update', { up: true });
+//   });
+// });
 
 servers.listen(process.env.port || 3000, function(){
   console.log("running");

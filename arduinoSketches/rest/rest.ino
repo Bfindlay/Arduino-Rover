@@ -1,90 +1,252 @@
-#include <SoftwareSerial.h>
- 
-#define DEBUG true
- 
-SoftwareSerial esp8266(8,9); // make RX Arduino line is pin 2, make TX Arduino line is pin 3.
-                             // This means that you need to connect the TX line from the esp to the Arduino's pin 2
-                             // and the RX line from the esp to the Arduino's pin 3
-void setup()
+/************************************************************
+ESP8266_Shield_Demo.h
+SparkFun ESP8266 AT library - Demo
+Jim Lindblom @ SparkFun Electronics
+Original Creation Date: July 16, 2015
+https://github.com/sparkfun/SparkFun_ESP8266_AT_Arduino_Library
+
+This example demonstrates the basics of the SparkFun ESP8266
+AT library. It'll show you how to connect to a WiFi network,
+get an IP address, connect over TCP to a server (as a client),
+and set up a TCP server of our own.
+
+Development environment specifics:
+  IDE: Arduino 1.6.5
+  Hardware Platform: Arduino Uno
+  ESP8266 WiFi Shield Version: 1.0
+
+This code is released under the MIT license.
+
+Distributed as-is; no warranty is given.
+************************************************************/
+
+//////////////////////
+// Library Includes //
+//////////////////////
+// SoftwareSerial is required (even you don't intend on
+// using it).
+#include <SoftwareSerial.h> 
+#include <SparkFunESP8266WiFi.h>
+#include <TextFinder.h>
+
+
+//////////////////////////////
+// WiFi Network Definitions //
+//////////////////////////////
+// Replace these two character strings with the name and
+// password of your WiFi network.
+const char mySSID[] = "Skynet";
+const char myPSK[] = "1Findlay";
+
+//////////////////////////////
+// ESP8266Server definition //
+//////////////////////////////
+// server object used towards the end of the demo.
+// (This is only global because it's called in both setup()
+// and loop()).
+ESP8266Server server = ESP8266Server(80);
+
+//////////////////
+// HTTP Strings //
+//////////////////
+
+
+
+
+void setup() 
 {
+ 
   Serial.begin(9600);
-  esp8266.begin(9600); // your esp's baud rate might be different
+  //serialTrigger(F("Press any key to begin."));
+
+  // initializeESP8266() verifies communication with the WiFi
+  // shield, and sets it up.
+  initializeESP8266();
+
+  // connectESP8266() connects to the defined WiFi network.
+  connectESP8266();
   
-  pinMode(11,OUTPUT);
-  digitalWrite(11,LOW);
+  getRequest();
+  serverSetup();
+
   
-  pinMode(12,OUTPUT);
-  digitalWrite(12,LOW);
-  
-  pinMode(13,OUTPUT);
-  digitalWrite(13,LOW);
-   
-  sendData("AT+RST\r\n",2000,DEBUG); // reset module
-  sendData("AT+CWMODE=2\r\n",1000,DEBUG); // configure as access point
-  sendData("AT+CIFSR\r\n",1000,DEBUG); // get ip address
-  sendData("AT+CIPMUX=1\r\n",1000,DEBUG); // configure for multiple connections
-  sendData("AT+CIPSERVER=1,3000\r\n",1000,DEBUG); // turn on server on port 80
+ 
 }
- 
-void loop()
-{
-  if(esp8266.available()) // check if the esp is sending a message 
+void getRequest(){
+  ESP8266Client client;
+  TextFinder finder( client );
+  const char destServer[] = "rover-project.azurewebsites.net";
+  int retVal = client.connect(destServer, 80);
+  if (retVal <= 0)
   {
+    Serial.println(F("Failed to connect to server."));
+    return;
+  }
+
+  Serial.println("the request response is");
+    const String request = "GET /api HTTP/1.1\n"
+                           "Host: rover-project.azurewebsites.net\n"
+                           "\n";
  
-    
-    if(esp8266.find("+IPD,"))
+   client.print(request);
+
+  while (client.available()){
+   //Serial.write(client.read()); // read() gets the FIFO char
+   String line = client.readStringUntil('\n');
+   Serial.println("-----");
+   Serial.println(line);
+  }
+  if (client.connected())
+    client.stop(); // stop() closes a TCP connection.
+
+}
+
+void serverSetup(){
+  server.begin();
+  Serial.print(F("Server started! Go to "));
+  Serial.println(esp8266.localIP());
+  Serial.println();
+}
+void serverStart(){
+  ESP8266Client client = server.available(500);
+  
+  if (client) 
+  {
+    Serial.println(F("Client Connected!"));
+    // an http request ends with a blank line
+    boolean currentLineIsBlank = true;
+    while (client.connected()) 
     {
-     delay(1000); // wait for the serial buffer to fill up (read all the serial data)
-     // get the connection id so that we can then disconnect
-     int connectionId = esp8266.read()-48; // subtract 48 because the read() function returns 
-                                           // the ASCII decimal value and 0 (the first decimal number) starts at 48
-          
-     esp8266.find("pin="); // advance cursor to "pin="
-     
-     int pinNumber = (esp8266.read()-48)*10; // get first number i.e. if the pin 13 then the 1st number is 1, then multiply to get 10
-     pinNumber += (esp8266.read()-48); // get second number, i.e. if the pin number is 13 then the 2nd number is 3, then add to the first number
-     
-     digitalWrite(pinNumber, !digitalRead(pinNumber)); // toggle pin    
-     
-     // make close command
-     String closeCommand = "AT+CIPCLOSE="; 
-     closeCommand+=connectionId; // append connection id
-     closeCommand+="\r\n";
-     
-     sendData(closeCommand,1000,DEBUG); // close connection
+      if (client.available()) 
+      {
+        char c = client.read();
+        // if you've gotten to the end of the line (received a newline
+        // character) and the line is blank, the http request has ended,
+        // so you can send a reply
+        if (c == '\n' && currentLineIsBlank) 
+        {
+          Serial.println(F("Sending HTML page"));
+          // send a standard http response header:
+          const String htmlHeader = "HTTP/1.1 200 OK\r\n"
+                          "Content-Type: text/html\r\n"
+                          "Connection: close\r\n\r\n"
+                          "<!DOCTYPE HTML>\r\n"
+                          "<html>\r\n";
+
+          client.print(htmlHeader);
+          String htmlBody;
+          // output the value of each analog input pin
+          for (int a = 0; a < 6; a++)
+          {
+            htmlBody += "A";
+            htmlBody += String(a);
+            htmlBody += ": ";
+            htmlBody += String(analogRead(a));
+            htmlBody += "<br>\n";
+          }
+          htmlBody += "</html>\n";
+          client.print(htmlBody);
+          break;
+        }
+        if (c == '\n') 
+        {
+          // you're starting a new line
+          currentLineIsBlank = true;
+        }
+        else if (c != '\r') 
+        {
+          // you've gotten a character on the current line
+          currentLineIsBlank = false;
+        }
+      }
+    }
+    // give the web browser time to receive the data
+    delay(1);
+   
+    // close the connection:
+    client.stop();
+    Serial.println(F("Client disconnected"));
+  }
+  
+}
+
+
+void loop() {
+   serverStart();
+}
+
+void initializeESP8266(){
+ 
+  int test = esp8266.begin();
+  if (test != true)
+  {
+    Serial.println(F("Error talking to ESP8266."));
+    errorLoop(test);
+  }
+  Serial.println(F("ESP8266 Shield Present"));
+}
+
+void connectESP8266(){
+  int retVal = esp8266.getMode();
+  if (retVal != ESP8266_MODE_STA)
+  { 
+    retVal = esp8266.setMode(ESP8266_MODE_STA);
+    if (retVal < 0)
+    {
+      Serial.println(F("Error setting mode."));
+      errorLoop(retVal);
+    }
+  }
+  Serial.println(F("Mode set to station"));
+
+  retVal = esp8266.status();
+  if (retVal <= 0)
+  {
+    Serial.print(F("Connecting to "));
+    Serial.println(mySSID);
+    retVal = esp8266.connect(mySSID, myPSK);
+    if (retVal < 0)
+    {
+      Serial.println(F("Error connecting"));
+      errorLoop(retVal);
     }
   }
 }
- 
-/*
-* Name: sendData
-* Description: Function used to send data to ESP8266.
-* Params: command - the data/command to send; timeout - the time to wait for a response; debug - print to Serial window?(true = yes, false = no)
-* Returns: The response from the esp8266 (if there is a reponse)
-*/
-String sendData(String command, const int timeout, boolean debug)
+
+void displayConnectInfo()
 {
-    String response = "";
-    
-    esp8266.print(command); // send the read character to the esp8266
-    
-    long int time = millis();
-    
-    while( (time+timeout) > millis())
-    {
-      while(esp8266.available())
-      {
-        
-        // The esp has data so display its output to the serial window 
-        char c = esp8266.read(); // read the next character.
-        response+=c;
-      }  
-    }
-    
-    if(debug)
-    {
-      Serial.print(response);
-    }
-    
-    return response;
+  char connectedSSID[24];
+  memset(connectedSSID, 0, 24);
+  int retVal = esp8266.getAP(connectedSSID);
+  if (retVal > 0)
+  {
+    Serial.print(F("Connected to: "));
+    Serial.println(connectedSSID);
+  }
+  IPAddress myIP = esp8266.localIP();
+  Serial.print(F("My IP: ")); Serial.println(myIP);
+}
+
+
+
+// errorLoop prints an error code, then loops forever.
+void errorLoop(int error)
+{
+  Serial.print(F("Error: ")); Serial.println(error);
+  Serial.println(F("Looping forever."));
+  for (;;)
+    ;
+}
+
+// serialTrigger prints a message, then waits for something
+// to come in from the serial port.
+void serialTrigger(String message)
+{
+  Serial.println();
+  Serial.println(message);
+  Serial.println();
+  while (!Serial.available())
+    ;
+  while (Serial.available())
+    Serial.read();
 }
