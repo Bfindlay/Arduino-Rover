@@ -2,26 +2,28 @@ int trigPin = 8;    //Trig - green Jumper
 int echoPin = 9;    //Echo - yellow Jumper
 long duration, cm;
 void setup() {
-  // initialize serial communication at 9600 bits per second:
   
   Serial.begin(9600);
   pinMode(13,OUTPUT);
   pinMode(12,OUTPUT);
   pinMode(11,OUTPUT);
   pinMode(10,OUTPUT);
-  
+
+  //Trigger and echo pins for the ultrasonic sensor
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
+  //testing the methods
   blinkAll();
  
 }
 
 void loop() {
+  //Check and log distance to serial
   distance();
  if (Serial.available() > 0) {
    char input = Serial.read();  // read first available byte into a variable
-   if (input == 'L') {          // if the variable equals H, or ASCII 72
+   if (input == 'L') {          // compare it and invoke appropriate function
       left();
    }else if(input == 'R'){
       right();
