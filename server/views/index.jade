@@ -2,20 +2,27 @@ extends layout
 block content
     script(src="https://cdn.socket.io/socket.io-1.4.5.js")
     script.
+        var state;
         var socket = io.connect();
         var dialogue = document.getElementById('terminal');
         socket.on('connected', function(){
+            state = true;
             var status = document.getElementById('status');
             status.innerHTML = "Status: Connected";
             console.log("connection");
         });
         socket.on('disconnect', function(){
+            state = false;
             var status = document.getElementById('status');
             status.innerHTML = "Status: Disconnected";
             console.log("disconnect");
         });
         socket.on('data', function (data) {
             console.log("received data",data);
+        });
+        socket.on('return', function (data) {
+            document.getElementById('distance').value = data;
+            //console.log("return data",data);
         });
     .row
         .small-12.large-5.columns.contain
@@ -25,6 +32,7 @@ block content
         .small-12.large-7.columns.contain
             .map-flex
                 div(id="status") 
+                input(type='text' value='' id='distance') 
         .small-12.large-6.columns.contain
             .terminal-flex
                 .text-editor.wrap
