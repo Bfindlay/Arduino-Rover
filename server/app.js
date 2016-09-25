@@ -6,7 +6,7 @@ let servers = require('http').Server(app);
 let io = require('socket.io')(servers);
 let home = require('./routes/home');
 let api = require('./routes/api');
-let SerialPort = require("serialport").SerialPort;
+let SerialPort = require("serialport");
 
 let portConfig = {
          baudRate: 9600
@@ -23,7 +23,7 @@ app.use('/api', api);
 
 /*** SERIAL PORT CONNECTION */
 
-var serialport = new SerialPort("/dev/cu.usbmodem1411", portConfig); // replace this address with your port address
+var serialport = new SerialPort("/dev/cu.usbmodem141111", portConfig); // replace this address with your port address
 serialport.on('open', function(){
   // Now server is connected to Arduino
   console.log('Serial Port Opend');
@@ -37,7 +37,8 @@ serialport.on('open', function(){
 
       serialport.on('data', function(data){
               console.log("Received",data.toString('utf8'));
-              //socket.emit('data', data);
+              var ret = data.toString('utf8');
+              socket.emit('return', ret);
          
       });
       socket.on('data', function (data) {
