@@ -1,10 +1,9 @@
 
-
 var logs = [];
 (function(){
       $('.terminal').typeIt({
      strings: ['Initialising rover uplink','Rover uplink connection Successful', "rover is ready"],
-     speed: 50,
+     speed: 15,
     });
 })();
 
@@ -12,7 +11,7 @@ var logs = [];
 var connect = function(){
      $('.terminal').typeIt({
         strings: ["Establishing uplink connection to rover ","Initialising .........." ,"success"],
-        typeSpeed: 2
+        speed: 20,
       });
       socket.connect();
       addLog();
@@ -20,7 +19,7 @@ var connect = function(){
 var disconnect = function(){
      $('.terminal').typeIt({
         strings: ["Closing rover connection", "success"],
-        typeSpeed: 2
+        speed: 10
       });
       socket.disconnect();
       addLog();
@@ -29,7 +28,7 @@ var disconnect = function(){
 var refreshLogs = function(){
     $(".terminal").typeIt({
         strings: ["Refreshing logs", "please wait"],
-        typeSpeed: 2
+        speed: 10
       });
       logs = [];
 };
@@ -37,17 +36,18 @@ var refreshLogs = function(){
 var refreshMap = function(){
     $('.terminal').typeIt({
         strings: ["Refreshing Map", "please wait"],
-        typeSpeed: 2
+        speed: 10
       });
       addLog();
 }
 
 var left = function(){
     addLog();
-    var strings =  ["Sending left turn command", "waiting for rover response", "failed"];
+    
+    var strings =  ["Sending left turn command", "waiting for rover response",  (state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
          strings: strings,
-        typeSpeed: 2
+         speed: 10
       });
       console.log("sending LEFT data");
       socket.emit('data', 'L');
@@ -56,11 +56,11 @@ var left = function(){
 };
 
 var right = function(){
-    var strings = ["Sending right turn command", "waiting for rover response", "failed"];
+    var strings = ["Sending right turn command", "waiting for rover response", (state) ? "Success" : "Failed"];
     addLog();
     $('.terminal').typeIt({
          strings: strings,
-        typeSpeed: 1
+        speed: 10
       });
       socket.emit('data', 'R');
       logs.push(strings);
@@ -69,10 +69,10 @@ var right = function(){
 
 var forwards = function(){
      addLog();
-     var strings = ["Sending drive command", "waiting for rover response", "failed"];
+     var strings = ["Sending drive command", "waiting for rover response", (state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
         strings: strings,
-        typeSpeed: 10
+        speed: 10
       });
       socket.emit('data', 'F');
       logs.push(strings);
@@ -81,10 +81,10 @@ var forwards = function(){
 
 var reverse = function(){
      addLog();
-     var strings = ["Sending reverse command", "waiting for rover response", "failed"];
+     var strings = ["Sending reverse command", "waiting for rover response", (state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
         strings: strings,
-        typeSpeed: 2
+        speed: 10
       });
       socket.emit('data', "B");
       logs.push(strings);
