@@ -53,7 +53,7 @@ void loop() {
      //THis will be where we handle the response from the rover
       int r = bt.read();
       //send rover response to server
-      Serial.print("bbbb");
+      Serial.print(r);
     }
 }
 
