@@ -1,0 +1,2 @@
+Board 1 mac : 00-15-83-35-89-8f  - MASTER
+Board 2 mac : 98-d3-34-90-a8-1a  -SLAVE
