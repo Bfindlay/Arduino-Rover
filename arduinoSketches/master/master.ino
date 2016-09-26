@@ -15,7 +15,6 @@ void setup()
   Serial.begin(9600);
   pinMode(RxD, INPUT);
   pinMode(TxD, OUTPUT);
-  setupBlueToothConnection();
   //wait 1s and flush the serial and btooth buffers
   delay(1000);
   Serial.flush();
@@ -50,29 +49,6 @@ void loop()
     }
   }
 }
-
 // Function to start the connection. Make sure slaveAddr is set to the right
 // value.
-void setupBlueToothConnection()
-{
-  // Set BluetoothBee BaudRate to default baud rate 38400
-  blueToothSerial.begin(38400);
-  // set the bluetooth work in master mode
-  blueToothSerial.print("\r\n+STWMOD=1\r\n");
-  // set the bluetooth name (irrelevant)
-  blueToothSerial.print("\r\n+STNA=Master20\r\n");
-  // Auto-connection is forbidden here
-  blueToothSerial.print("\r\n+STAUTO=0\r\n");
-  // This delay is required.
-  delay(2000);
-  blueToothSerial.flush();
-  // This delay is required.
-  delay(2000);
 
-  //form the full connection command
-  Serial.print("Connecting to slave: ");
-  Serial.println(slaveAddr);
-  //send connection command
-  blueToothSerial.print("\r\n+CONN=" + slaveAddr + "\r\n");
-  delay(5000);
-}

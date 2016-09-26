@@ -1,58 +1,68 @@
-int trigPin = 8;    //Trig - green Jumper
-int echoPin = 9;    //Echo - yellow Jumper
-long duration, cm;
+/**** BLUETOOTH SETUP ****/
+#include <SoftwareSerial.h>                     // Software Serial Port
+
+#define RxD 7
+#define TxD 6
+
+#define DEBUG_ENABLED  1
+
+// Make sure you modify this address to the one in your Slave Device!!
+String slaveAddr = "98,D3,34,90,A8,1A";
+SoftwareSerial blueToothSerial(RxD,TxD);
+
+/*****************************/
+
+
 void setup() {
   
   Serial.begin(9600);
+
+  /*** Bluetooth setup *******************************/
+  pinMode(RxD, INPUT);
+  pinMode(TxD, OUTPUT);
+  blueToothSerial.begin(38400);
+
+  /*****************************************************/
+ 
   pinMode(13,OUTPUT);
   pinMode(12,OUTPUT);
   pinMode(11,OUTPUT);
   pinMode(10,OUTPUT);
-
-  //Trigger and echo pins for the ultrasonic sensor
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
 
   //testing the methods
   blinkAll();
  
 }
 
+
+
+
+
 void loop() {
-  //Check and log distance to serial
-  distance();
+
+  //Test sending bluetooth command to slave
+  blueToothSerial.write("Hello");
+  digitalWrite(12, HIGH);
+  delay(2000);
+  digitalWrite(12, LOW);
  if (Serial.available() > 0) {
    char input = Serial.read();  // read first available byte into a variable
-   if (input == 'L') {          // compare it and invoke appropriate function
-      left();
-   }else if(input == 'R'){
-      right();
-   }else if(input == 'B'){
-      reverse();
-   }else if(input == 'F'){
-      forward();
-   }
+
+    // THis is where we retrieve the data from the server,
+    //Then send it to the rover via bluetooth
+  
+     blueToothSerial.write(input);
   }
+
+  /******* READ BLUETOOTH SERIAL ******/
+  if(blueToothSerial.available()){
+
+      //THis will be where we handle the response from the rover
+      
+    }
 }
 
-void distance(){
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
- 
-  // Read the signal from the sensor: a HIGH pulse whose
-  // duration is the time (in microseconds) from the sending
-  // of the ping to the reception of its echo off of an object.
-  pinMode(echoPin, INPUT);
-  duration = pulseIn(echoPin, HIGH);
-  // convert the time into a distance
-  cm = (duration/2) / 29.1;
-  
-  Serial.print(cm);
-  Serial.print("cm");
-}
+
 void blinkAll(){
   digitalWrite(13, HIGH);
   digitalWrite(12, HIGH);
@@ -68,14 +78,16 @@ void blinkAll(){
 }
 
 void left(){
-   digitalWrite(13, HIGH);
-    //Serial.print("1");
+    digitalWrite(13, HIGH);
+    Serial.print("<left>");
     delay(1000);
     digitalWrite(13,LOW);
 }
 
 void right(){
+  Serial.print("right");
    digitalWrite(12, HIGH);
+   
     //Serial.print("1");
     delay(1000);
     digitalWrite(12,LOW);
