@@ -1,5 +1,5 @@
 body{
-     background: url(../images/bg.jpg) no-repeat center center fixed; 
+     background: url(../images/bg2.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -10,13 +10,13 @@ body{
     display: flex;
     height: 40vh;
     background-color: rgba(75, 75, 75, 0.4);
-    padding: 10px;
+    
     color: #f0f0f0;
     text-shadow: #000 0px 1px 0px;
     margin: 0.5em;
-    padding: 5em;
     z-index:1;
     overflow: hidden;
+    text-align: center;
 }
 .map-flex{
     display: flex;
@@ -107,6 +107,7 @@ div {
 a {
   display: inline-block;
   border-radius: 50%;
+  color:#1ff042;
 }
 
 a:hover .left, a:hover .top, a:hover .bottom, a:hover .right{
@@ -124,7 +125,6 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   height: 4em;
   border: 0.5em solid #333;
   border-radius: 50%;
-  margin-right: 1.5em;
 }
 
 .left:after {
@@ -147,7 +147,7 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   height: 4em;
   border: 0.5em solid #333;
   border-radius: 50%;
-  margin-right: 0.75em;
+
 }
 
 .top:after {
@@ -169,7 +169,7 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   height: 4em;
   border: 0.5em solid #333;
   border-radius: 50%;
-  margin-left: 0.75em;
+
 }
 
 .bottom:after {
@@ -191,7 +191,7 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   height: 4em;
   border: 0.5em solid #333;
   border-radius: 50%;
-  margin-left: 1.5em;
+
 }
 
 .right:after {
@@ -243,3 +243,45 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
     -o-transition: all 0.5s ease-out;
     transition: all 0.5s ease-out;
 }
+
+
+/***** control grid *****/
+@media screen and (min-device-width:698px) {
+  .showgrid {
+    width: 698px;
+    margin: auto;
+  }
+}
+
+.showgrid{
+    margin: 0 auto;
+    padding-left: 10em;
+    padding-top: 2em;
+    padding-bottom: 5em;
+}
+.grid-column {
+ 
+}
+
+.grid-row {
+  width: 100%;
+  margin: auto;
+}
+
+@media (min-device-width: 698px) {
+  .grid-column {
+    width: 30;
+    height: 30px;
+    display: inline;
+    float: left;
+  }
+}
+
+.grid-column {
+  width: 80px;
+  height: 80px;
+  margin: auto;
+}
+
+
+/********* Tri state button *******/

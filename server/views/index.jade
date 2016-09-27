@@ -25,6 +25,16 @@ block content
             //console.log("return data",data);
         });
     .row
+        a(class="success button" onclick='connect()') Connect
+            a(class="alert button" onclick='disconnect()') Disconnect
+            .switch-toggle.switch-3.switch-candy
+                input#on(name='state-d', type='radio', checked='')
+                label(for='on', onclick='') Manual
+                input#na(name='state-d', type='radio', checked='')
+                label(for='na', onclick='') Autonomous
+                input#off(name='state-d', type='radio')
+                label(for='off', onclick='') Semi-Autonomous
+                a
         .small-12.large-5.columns.contain
             .secondary-flex
                 .terminal-Logs(id="terminal")
@@ -32,28 +42,34 @@ block content
         .small-12.large-7.columns.contain
             .map-flex
                 div(id="status") 
-                input(type='text' value='' id='distance') 
+                input(type='text' value='' id='distance')
         .small-12.large-6.columns.contain
             .terminal-flex
                 .text-editor.wrap
                     .terminal
         .small-12.large-6.columns.contain
             .main-flex
-                div
-                a(onclick='left()')
-                    span.left
-                div
-                 a(onclick='forwards()')
-                    span.top
-                div
-                 a(onclick='reverse()')
-                    span.bottom
-                div
-                 a(onclick='right()')
-                    span.right
-        .small-12.large-6.columns.contain
-            a(class="success button" onclick='connect()') Connect
-            a(class="success button" onclick='disconnect()') Disconnect
+                .showgrid
+                    .grid-row
+                        .grid-column 
+                        .grid-column 
+                            a(onclick='forwards()')
+                                span.top
+                        .grid-column 
+                    .grid-row
+                        .grid-column
+                            a(onclick='left()')
+                                span.left
+                        .grid-column 
+                        .grid-column 
+                            a(onclick='right()')
+                                span.right
+                    .grid-row
+                        .grid-column 
+                        .grid-column
+                            a(onclick='reverse()')
+                                span.bottom
+                        .grid-column 
     script(src="javascripts/vendor/typeit.min.js")
     script(src='javascripts/vendor/rover.js')
       
