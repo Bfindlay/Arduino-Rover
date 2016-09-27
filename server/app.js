@@ -54,11 +54,18 @@ serialport.on('open', function(){
       serialport.on('data', function (data) {
         
        // console.log("Returned", data);
-        let dat = new Buffer(data);
-       // console.log(dat.toString())
-        let final = dat.toString().replace(/\s/g, '');
-        console.log(final);
-        socket.emit('return', final);
+        let buf = new Buffer(data);
+      
+        let result = JSON.parse(buf.toString().replace(/\s/g, '').replace(/'/g, '"'));
+        //TODO fix this lol
+        if(result.heading !== undefined){
+          socket.emit('heading', result);
+        }else if (result.distance !== undefined){
+          socket.emit('distance', result);
+        }else{
+          //direction object
+          socket.emit('return', result);
+        }
       });
 
       socket.on('data', function (data) {
