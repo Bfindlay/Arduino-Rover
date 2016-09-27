@@ -6,13 +6,14 @@ let servers = require('http').Server(app);
 let io = require('socket.io')(servers);
 let home = require('./routes/home');
 let api = require('./routes/api');
-
-
 var SerialPort = require('serialport');
 
 var serialport = new SerialPort('/dev/cu.usbmodem141111', {
- // parser: SerialPort.parsers.byteLength(4)
- parser: SerialPort.parsers.byteLength(4)
+  //parser: SerialPort.parsers.byteLength(3)
+ // parser: SerialPort.parsers.readline('\n')
+ //parser: SerialPort.parsers.byteLength(5)
+ parser: SerialPort.parsers.byteDelimiter([123,125])
+  //parser: SerialPort.parsers.readline('\n')
 });
 
 
@@ -37,21 +38,27 @@ serialport.on('error', function(err){
 serialport.on('open', function(){
 
 
+
+
+
+
 //TODO handle on disconnect event
 
   // Now server is connected to Arduino
   console.log('Serial Port Opend');
-
-  var lastValue;
   io.sockets.on('connection', function (socket) {
       //Connecting to client 
       console.log('Socket connected');
       socket.emit('connected');
-      var lastValue;
 
       serialport.on('data', function (data) {
-        console.log('Data: ' + data.toString('utf8'));
-        socket.emit('return', data);
+        
+       // console.log("Returned", data);
+        let dat = new Buffer(data);
+       // console.log(dat.toString())
+        let final = dat.toString().replace(/\s/g, '');
+        console.log(final);
+        socket.emit('return', final);
       });
 
       socket.on('data', function (data) {
