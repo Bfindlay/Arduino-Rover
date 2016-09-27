@@ -47,7 +47,7 @@ void setup() {
  
 }
 void loop() {
-  compass();
+
   char c;
  if(bt.available()){ // Checks whether data is comming from the serial port
     c = bt.read();
@@ -75,9 +75,9 @@ void compass(){
   mag.getEvent(&event);
  
   /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
+//  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
+//  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
+//  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
 
   // Hold the module so that Z is pointing 'up' and you can measure the heading with x&y
   // Calculate heading when the magnetometer is level, then correct for signs of axis.
@@ -101,9 +101,12 @@ void compass(){
   // Convert radians to degrees for readability.
   float headingDegrees = heading * 180/M_PI; 
   
-  Serial.print("Heading (degrees): "); Serial.println(headingDegrees);
-  
-  delay(500);
+ //Serial.print("Heading (degrees): "); Serial.println(headingDegrees);
+  // send heading to control arduino
+  bt.print("{heading: ");
+  bt.print(headingDegrees);
+  bt.print("}");
+
 }
 
 void blinkAll(){
@@ -133,36 +136,41 @@ void distance(){
   duration = pulseIn(echoPin, HIGH);
   // convert the time into a distance
   cm = (duration/2) / 29.1;
-  
+
+  Serial.print("{distance: ");
   Serial.print(cm);
-  Serial.print("cm");
+  Serial.print("cm}");
+ 
 }
 
 
 void left(){
     digitalWrite(13, HIGH);
-    bt.write("llll");
+    bt.println("{direction: left}");
     delay(1000);
     digitalWrite(13,LOW);
 }
 
 void right(){
-    bt.write("rrrr");
+    bt.println("{direction: right}");
     digitalWrite(12, HIGH);
     delay(1000);
     digitalWrite(12,LOW);
 }
 
 void forward(){
+      //poll compass
+    compass();
     digitalWrite(11, HIGH);
-    bt.write("ffff");
+    //bt.println("{direction: forward}");
     delay(1000);
     digitalWrite(11,LOW);
 }
 
 void reverse(){
+    distance();
     digitalWrite(10, HIGH);
-    bt.print("bbbb");
+    bt.println("{direction: backwards}");
     delay(1000);
     digitalWrite(10,LOW);
 }

@@ -44,16 +44,17 @@ void loop() {
     char input = Serial.read();  // read first available byte into a variable
     // THis is where we retrieve the data from the server,
     //Then send it to the rover via bluetooth
-     bt.write(input);
+     bt.print(input);
+     //Serial.print('h');
   }
   
 
   /******* READ BLUETOOTH SERIAL ******/
   if(bt.available()){
      //THis will be where we handle the response from the rover
-      int r = bt.read();
+      char r = bt.read();
       //send rover response to server
-      Serial.print(r);
+      Serial.println(r);
     }
 }
 
