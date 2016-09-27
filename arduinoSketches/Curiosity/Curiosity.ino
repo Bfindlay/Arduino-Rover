@@ -64,6 +64,12 @@ void loop() {
     case 'B':
       reverse();
       break;
+    case 'H':
+      compass();
+      break;
+    case 'D':
+      distance();
+      break;
   }
  }
 
@@ -103,9 +109,9 @@ void compass(){
   
  //Serial.print("Heading (degrees): "); Serial.println(headingDegrees);
   // send heading to control arduino
-  bt.print("{heading: ");
+  bt.print("{'heading': '");
   bt.print(headingDegrees);
-  bt.print("}");
+  bt.print("'}");
 
 }
 
@@ -137,22 +143,23 @@ void distance(){
   // convert the time into a distance
   cm = (duration/2) / 29.1;
 
-  Serial.print("{distance: ");
-  Serial.print(cm);
-  Serial.print("cm}");
+  Serial.println(cm);
+  bt.print("{'distance': '");
+  bt.print(cm);
+  bt.print("cm'}");
  
 }
 
 
 void left(){
     digitalWrite(13, HIGH);
-    bt.println("{direction: left}");
+    bt.println("{'direction': 'left'}");
     delay(1000);
     digitalWrite(13,LOW);
 }
 
 void right(){
-    bt.println("{direction: right}");
+    bt.println("{'direction': 'right'}");
     digitalWrite(12, HIGH);
     delay(1000);
     digitalWrite(12,LOW);
@@ -162,7 +169,7 @@ void forward(){
       //poll compass
     compass();
     digitalWrite(11, HIGH);
-    //bt.println("{direction: forward}");
+    bt.println("{'direction': 'forward'}");
     delay(1000);
     digitalWrite(11,LOW);
 }
@@ -170,7 +177,7 @@ void forward(){
 void reverse(){
     distance();
     digitalWrite(10, HIGH);
-    bt.println("{direction: backwards}");
+    bt.println("{'direction': 'backwards'}");
     delay(1000);
     digitalWrite(10,LOW);
 }
