@@ -107,7 +107,6 @@ div {
 a {
   display: inline-block;
   border-radius: 50%;
-  color:#1ff042;
 }
 
 a:hover .left, a:hover .top, a:hover .bottom, a:hover .right{
@@ -123,7 +122,7 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   display: inline-block;
   width: 4em;
   height: 4em;
-  border: 0.5em solid #333;
+  border: 0.5em solid rgba(31, 240, 66, 0.75);
   border-radius: 50%;
 }
 
@@ -134,8 +133,8 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   margin-left: 0.6em;
   width: 1.4em;
   height: 1.4em;
-  border-top: 0.5em solid #333;
-  border-right: 0.5em solid #333;
+  border-top: 0.5em solid rgba(31, 240, 66, 0.75);
+  border-right: 0.5em solid rgba(31, 240, 66, 0.75);
   -moz-transform: rotate(-135deg);
   -webkit-transform: rotate(-135deg);
   transform: rotate(-135deg);
@@ -145,7 +144,7 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   display: inline-block;
   width: 4em;
   height: 4em;
-  border: 0.5em solid #333;
+  border: 0.5em solid rgba(31, 240, 66, 0.75);
   border-radius: 50%;
 
 }
@@ -156,8 +155,8 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   margin-top: 1.4em;
   width: 1.4em;
   height: 1.4em;
-  border-top: 0.5em solid #333;
-  border-right: 0.5em solid #333;
+  border-top: 0.5em solid rgba(31, 240, 66, 0.75);
+  border-right: 0.5em solid rgba(31, 240, 66, 0.75);
   -moz-transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
@@ -167,7 +166,7 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   display: inline-block;
   width: 4em;
   height: 4em;
-  border: 0.5em solid #333;
+  border: 0.5em solid rgba(31, 240, 66, 0.75);
   border-radius: 50%;
 
 }
@@ -178,8 +177,8 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   margin-top: 0.6em;
   width: 1.4em;
   height: 1.4em;
-  border-top: 0.5em solid #333;
-  border-right: 0.5em solid #333;
+  border-top: 0.5em solid rgba(31, 240, 66, 0.75);
+  border-right: 0.5em solid rgba(31, 240, 66, 0.75);
   -moz-transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
   transform: rotate(135deg);
@@ -189,7 +188,7 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   display: inline-block;
   width: 4em;
   height: 4em;
-  border: 0.5em solid #333;
+  border: 0.5em solid rgba(31, 240, 66, 0.75);
   border-radius: 50%;
 
 }
@@ -201,8 +200,8 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
   margin-left: -0.6em;
   width: 1.4em;
   height: 1.4em;
-  border-top: 0.5em solid #333;
-  border-right: 0.5em solid #333;
+  border-top: 0.5em solid rgba(31, 240, 66, 0.75);
+  border-right: 0.5em solid rgba(31, 240, 66, 0.75);
   -moz-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
