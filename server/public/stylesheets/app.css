@@ -43,7 +43,8 @@ body{
     overflow: auto;
 
 }
-#status{
+#status , #heading , #distance {
+   margin-right: 2em;
   color: #1ff042;
    font-family: 'AndaleMono', monospace;
   font-weight: bold;
