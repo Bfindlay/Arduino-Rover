@@ -1,7 +1,15 @@
 #include <SoftwareSerial.h>                     // Software Serial Port
+#include <Servo.h>  
 
+//A4 -> SDA
+//A5 ->SCL
 
 SoftwareSerial bt(2,3);  //TX | RX
+
+/**** SERVO ****/               
+Servo servoRight;
+Servo servoLeft;
+
 /******* RANGEFINDER **********/
 int trigPin = 8;    //Trig - green Jumper
 int echoPin = 9;    //Echo - yellow Jumper
@@ -18,8 +26,6 @@ Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
 
 
 void setup() {
- 
-  Serial.begin(9600);
   
   /* Initialise the sensor */
   if(!mag.begin())
@@ -29,20 +35,18 @@ void setup() {
     while(1);
   }
   
-  pinMode(2, INPUT);
-  pinMode(3, OUTPUT);
-  bt.begin(9600); // Default communication rate of the Bluetooth module
-  
-  pinMode(13,OUTPUT);
-  pinMode(12,OUTPUT);
-  pinMode(11,OUTPUT);
-  pinMode(10,OUTPUT);
+  pinMode(2, INPUT); //RX
+  pinMode(3, OUTPUT); //TX
+  bt.begin(57600); // Default communication rate of the Bluetooth module
   
   //Trigger and echo pins for the ultrasonic sensor
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
-  blinkAll(); 
+
+  // Add servos to pins 12 and 13
+  servoRight.attach(12); 
+  servoLeft.attach(13);
 
  
 }
@@ -115,19 +119,6 @@ void compass(){
 
 }
 
-void blinkAll(){
-  digitalWrite(13, HIGH);
-  digitalWrite(12, HIGH);
-  digitalWrite(11, HIGH);
-  digitalWrite(10, HIGH);
-
-  delay(1000);
-  digitalWrite(13,LOW);
-  digitalWrite(12,LOW);
-  digitalWrite(11,LOW);
-  digitalWrite(10,LOW);
-
-}
 void distance(){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(5);
@@ -143,42 +134,47 @@ void distance(){
   // convert the time into a distance
   cm = (duration/2) / 29.1;
 
-  Serial.println(cm);
   bt.print("{'distance': '");
   bt.print(cm);
   bt.print("cm'}");
- 
 }
 
 
 void left(){
-    digitalWrite(13, HIGH);
     bt.println("{'direction': 'left'}");
-    delay(1000);
-    digitalWrite(13,LOW);
+    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+    servoRight.writeMicroseconds(1300);        // Right wheel clockwise
+    delay(400);
+    servoLeft.writeMicroseconds(1500);         // stop left
+    servoRight.writeMicroseconds(1500);         // stop right  
 }
 
 void right(){
     bt.println("{'direction': 'right'}");
-    digitalWrite(12, HIGH);
-    delay(1000);
-    digitalWrite(12,LOW);
+    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
+    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
+    delay(400); // 0.4 seconds
+    servoLeft.writeMicroseconds(1500);         // stop left
+    servoRight.writeMicroseconds(1500);         // stop right
 }
 
 void forward(){
-      //poll compass
+    //poll compass
     compass();
-    digitalWrite(11, HIGH);
     bt.println("{'direction': 'forward'}");
+    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
+    servoRight.writeMicroseconds(1300);        // Right wheel clockwise
     delay(1000);
-    digitalWrite(11,LOW);
+    servoLeft.writeMicroseconds(1500);         // stop left
+    servoRight.writeMicroseconds(1500);         // stop right
 }
 
 void reverse(){
-    distance();
-    digitalWrite(10, HIGH);
     bt.println("{'direction': 'backwards'}");
-    delay(1000);
-    digitalWrite(10,LOW);
+    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
+    delay(1000); 
+    servoLeft.writeMicroseconds(1500);         // stop left
+    servoRight.writeMicroseconds(1500);         // stop right 
 }
 
