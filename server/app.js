@@ -54,17 +54,20 @@ serialport.on('open', function(){
       serialport.on('data', function (data) {
         
        // console.log("Returned", data);
-        let buf = new Buffer(data);
       
-        let result = JSON.parse(buf.toString().replace(/\s/g, '').replace(/'/g, '"'));
+        let result = safeParse(new Buffer(data));
         //TODO fix this lol
-        if(result.heading !== undefined){
-          socket.emit('heading', result);
-        }else if (result.distance !== undefined){
-          socket.emit('distance', result);
-        }else{
-          //direction object
-          socket.emit('return', result);
+        //TODO handle when result is undefined
+        console.log(result);
+        if(result !== undefined){
+          if(result.heading !== undefined){
+            socket.emit('heading', result);
+          }else if (result.distance !== undefined){
+            socket.emit('distance', result);
+          }else{
+            //direction object
+            socket.emit('return', result);
+          }
         }
       });
 
@@ -75,6 +78,13 @@ serialport.on('open', function(){
   });
 });
 
+let safeParse = data => {
+  try{
+    return JSON.parse(data.toString().replace(/\s/g, '').replace(/'/g, '"'));
+  }catch (e){
+    console.log("parse error" , e);
+  }
+};
 
 // io.on('connection', function(socket){
 //   console.log("got a connection!");
