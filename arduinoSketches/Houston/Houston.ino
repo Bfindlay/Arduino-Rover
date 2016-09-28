@@ -15,9 +15,12 @@ void setup() {
   Serial.begin(9600);
 
   /*** Bluetooth setup *******************************/
+
+  // 2 TX
+  // 3 RX
   pinMode(2, INPUT);
   pinMode(3, OUTPUT);
-  bt.begin(9600);
+  bt.begin(57600);
 
   /*****************************************************/
  
