@@ -135,6 +135,7 @@ socket.on('heading', (data) => {
     heading = data.heading;
     document.getElementById('heading').innerHTML = "Heading: "+ data.heading;
     plotter(heading, distance);
+    rover.update(heading);
 });
 
 
