@@ -1,6 +1,7 @@
 extends layout
 block content
     script(src="https://cdn.socket.io/socket.io-1.4.5.js")
+    script(src='/javascripts/vendor/p5.js')
     script.
         var state;
         var socket = io.connect();
@@ -44,6 +45,7 @@ block content
                 div(id="status") 
                 div(id="heading") 
                 div(id="distance")
+                div(id="canvas")
         .small-12.large-6.columns.contain
             .terminal-flex
                 .text-editor.wrap
@@ -73,4 +75,5 @@ block content
                         .grid-column 
     script(src="javascripts/vendor/typeit.min.js")
     script(src='javascripts/vendor/rover.js')
+    script(src='/javascripts/map.js')
       

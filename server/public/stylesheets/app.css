@@ -284,4 +284,8 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
 }
 
 
-/********* Tri state button *******/
+/********* Canvas *******/
+#canvas {
+    width: 300px;
+    height: 150px;
+}
