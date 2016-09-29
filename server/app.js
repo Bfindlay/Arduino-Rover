@@ -8,7 +8,7 @@ let home = require('./routes/home');
 let api = require('./routes/api');
 var SerialPort = require('serialport');
 
-var serialport = new SerialPort('/dev/cu.usbmodem141111', {
+var serialport = new SerialPort('/dev/cu.usbmodem1421', {
   //parser: SerialPort.parsers.byteLength(3)
  // parser: SerialPort.parsers.readline('\n')
  //parser: SerialPort.parsers.byteLength(5)
