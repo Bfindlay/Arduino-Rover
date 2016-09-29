@@ -84,12 +84,6 @@ void compass(){
   sensors_event_t event; 
   mag.getEvent(&event);
  
-  /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-//  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-//  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-//  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
-
-  // Hold the module so that Z is pointing 'up' and you can measure the heading with x&y
   // Calculate heading when the magnetometer is level, then correct for signs of axis.
   float heading = atan2(event.magnetic.y, event.magnetic.x);
   
@@ -97,7 +91,7 @@ void compass(){
   // Find yours here: http://www.magnetic-declination.com/
   // Mine is: -13* 2' W, which is ~13 Degrees, or (which we need) 0.22 radians
   // If you cannot find your Declination, comment out these two lines, your compass will be slightly off.
-  float declinationAngle = 0.22;
+  float declinationAngle = 0.209;
   heading += declinationAngle;
   
   // Correct for when signs are reversed.
@@ -125,7 +119,6 @@ void distance(){
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
- 
   // Read the signal from the sensor: a HIGH pulse whose
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
@@ -133,10 +126,9 @@ void distance(){
   duration = pulseIn(echoPin, HIGH);
   // convert the time into a distance
   cm = (duration/2) / 29.1;
-
   bt.print("{'distance': '");
   bt.print(cm);
-  bt.print("cm'}");
+  bt.print("'}");
 }
 
 
@@ -177,4 +169,3 @@ void reverse(){
     servoLeft.writeMicroseconds(1500);         // stop left
     servoRight.writeMicroseconds(1500);         // stop right 
 }
-
