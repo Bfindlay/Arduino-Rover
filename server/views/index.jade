@@ -21,6 +21,12 @@ block content
         socket.on('data', function (data) {
             console.log("received data",data);
         });
+        socket.on('direction', function(data) {
+            if(data.direction == 'forward'){
+                console.log("forward");
+                rover.update();
+            }
+        });
         socket.on('return', function (data) {
             document.getElementById('distance').value = data;
             //console.log("return data",data);
