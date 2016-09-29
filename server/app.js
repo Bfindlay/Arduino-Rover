@@ -39,9 +39,6 @@ serialport.on('open', function(){
 
 
 
-
-
-
 //TODO handle on disconnect event
 
   // Now server is connected to Arduino
@@ -64,6 +61,8 @@ serialport.on('open', function(){
             socket.emit('heading', result);
           }else if (result.distance !== undefined){
             socket.emit('distance', result);
+          }else if (result.direction !== undefined){
+            socket.emit('direction', result);
           }else{
             //direction object
             socket.emit('return', result);
@@ -85,15 +84,6 @@ let safeParse = data => {
     console.log("parse error" , e);
   }
 };
-
-// io.on('connection', function(socket){
-//   console.log("got a connection!");
-//   socket.on('event', function (data) {
-//     console.log("got an event!");
-//     console.log(data);
-//     io.emit('update', { up: true });
-//   });
-// });
 
 servers.listen(process.env.port || 3000, function(){
   console.log("running");
