@@ -9,6 +9,13 @@ let logs = [];
     });
 })();
 
+let STOP = () => {
+    $('.terminal').typeIt({
+        strings: ["Stopping rover", (state) ? "Success" : "Failed"],
+        speed: 20
+      });
+    socket.emit('data', 'S');
+};
 
 let connect = () => {
      $('.terminal').typeIt({

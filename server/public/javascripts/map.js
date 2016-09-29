@@ -9,7 +9,8 @@ function setup() {
 // Only draw().
 // createCanvas() is called automatically with defaults.
 function draw() {
-
+  strokeWeight(4);  // Thicker
+   point(mouseX, mouseY);
 }
 
 
