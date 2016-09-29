@@ -7,16 +7,7 @@ let servers = require('http').Server(app);
 let io = require('socket.io')(servers);
 let home = require('./routes/home');
 let api = require('./routes/api');
-<<<<<<< HEAD
-let SerialPort = require('serialport');
 
-let serialport = new SerialPort('/dev/cu.usbmodem14131', {
-	//parser: SerialPort.parsers.byteLength(3)
-	// parser: SerialPort.parsers.readline('\n')
-	//parser: SerialPort.parsers.byteLength(5)
-	parser: SerialPort.parsers.byteDelimiter([123, 125])
-		//parser: SerialPort.parsers.readline('\n')
-=======
 var SerialPort = require('serialport');
 
 var serialport = new SerialPort('/dev/cu.usbmodem14131', {
@@ -25,7 +16,6 @@ var serialport = new SerialPort('/dev/cu.usbmodem14131', {
  //parser: SerialPort.parsers.byteLength(5)
  parser: SerialPort.parsers.byteDelimiter([123,125])
   //parser: SerialPort.parsers.readline('\n')
->>>>>>> 1c5851e
 });
 
 
@@ -42,56 +32,6 @@ app.use('/', home);
 app.use('/api', api);
 
 
-
-<<<<<<< HEAD
-=======
-/*** SERIAL PORT CONNECTION */
-serialport.on('error', function(err){
-  console.log("there was an error", err)
-})
-serialport.on('open', function(){
-
-
-
-//TODO handle on disconnect event
-
-  // Now server is connected to Arduino
-  console.log('Serial Port Opend');
-  io.sockets.on('connection', function (socket) {
-      //Connecting to client 
-      console.log('Socket connected');
-      socket.emit('connected');
-
-      serialport.on('data', function (data) {
-        
-       // console.log("Returned", data);
-      
-        let result = safeParse(new Buffer(data));
-        //TODO fix this lol
-        //TODO handle when result is undefined
-        console.log(result);
-        if(result !== undefined){
-          if(result.heading !== undefined){
-            socket.emit('heading', result);
-          }else if (result.distance !== undefined){
-            socket.emit('distance', result);
-          }else if (result.direction !== undefined){
-            socket.emit('direction', result);
-          }else{
-            //direction object
-            socket.emit('return', result);
-          }
-        }
-      });
-
-      socket.on('data', function (data) {
-        console.log("got data", data);
-        serialport.write(data);
-      });
-  });
-});
->>>>>>> 1c5851e
-
 // TODO handle undefined
 let safeParse = data => {
 	try {
@@ -101,15 +41,13 @@ let safeParse = data => {
 	}
 };
 
-<<<<<<< HEAD
 
 /*** SERIAL PORT CONNECTION */
 serialport.on('error', function(err) {
 	console.log("there was an error", err)
 });
+
 serialport.on('open', function() {
-
-
 
 	//  TODO handle on disconnect event
 
@@ -138,19 +76,14 @@ serialport.on('open', function() {
 				}
 			}
 		});
-
+	
 		socket.on('data', function(data) {
 			// FOR DEBUGGING console.log("got data", data);
 			serialport.write(data);
 		});
 	});
-=======
-servers.listen(process.env.port || 3000, function(){
-  console.log("running");
->>>>>>> 1c5851e
+
 });
-
-
 
 servers.listen(process.env.port || 3000, function() {
 	console.log("running");

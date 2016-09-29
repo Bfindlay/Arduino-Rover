@@ -4,88 +4,64 @@ function setup() {
   createCanvas(800, 400);
   background(255, 0, 0);
   window.rover = new Rover();
+  rover.show();
 }
 
-// CASE 3
-// Only draw().
-// createCanvas() is called automatically with defaults.
 function draw() {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-  strokeWeight(4);  // Thicker
-   point(mouseX, mouseY);
-=======
-  rover.show();
->>>>>>> Stashed changes
-=======
-  rover.show();
- 
->>>>>>> 1c5851e
+    //rover.show;
+    console.log("x", mouseX);
+    console.log("y", mouseY);
 }
 
-window.xVal = null;
-window.yVal = null;
+
 let plotter = (x, y) => {
   //  console.log("got a plot", x, y);
-  let xx = Math.cos(x * Math.PI / 180) * y;   // move object y pixels in direction 257
+  let xx = (Math.cos(x * Math.PI / 180) * y)+400;   // move object 17 pixels in direction 257
   // y += sin(257*pi/180)*17;`
-  let yy = Math.sin(x * Math.PI / 180) * y;
-
-  xx += 400;
-  yy += 200;
-
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-  console.log(xx, yy);
+  let yy = (Math.sin(x * Math.PI / 180) * y)+200;
+  //console.log(xx, yy);
   ellipse(xx, yy, 10, 10);
 };
-=======
-  xVal = xx;
-  yVal = yy;
-  // console.log(xx, yy);
-  fill(255);
-  //ellipse(xx, yy, 10, 10);
-};
 
-
-function Rover(){
-  this.y = height/2;
-  this.x = width/2;
-
- 
-=======
-  xVal = xx;
-  yVal = yy;
-  // console.log(xx, yy);
-  fill(255);
-  ellipse(xx, yy, 10, 10);
-};
 
 function Rover(){
   this.y = 200;
   this.x = 400;
+  this.xOffset = 400;
+  this.yOffset = 200;
 
->>>>>>> 1c5851e
   this.show = function(){
     fill(0);
     ellipse(this.x,this.y,10,10);
   };
 
-<<<<<<< HEAD
   this.update = function(heading){
-    console.log(heading);
-    this.x = (Math.cos(heading * Math.PI / 180) + 400)   // move object y pixels in direction 257
-    // y += sin(257*pi/180)*17;`
-    this.y += 10;
+  
+    if(heading < 10){
+      this.xOffset +=  0;
+      this.yOffset -= 2;
+    }else if(heading < 20){
+      this.xOffset +=  1;
+      this.yOffset -= 2;
+    } else if(heading < 25){
+      this.xOffset +=  2;
+      this.yOffset -= 3;
+    }else if(heading < 180){
+      this.xOffset += 2;
+      this.yOffset += 1;
+    }else if(heading < 180){
+       this.xOffset -=2;
+      this.yOffset +=1;
+    }else{
+      this.xOffset -=2;
+      this.yOffset -=1;
+    }
+   
+   this.x = (Math.cos(heading * Math.PI / 180) * 2) + this.xOffset ;   // move object 2 pixels in direction heading
+   this.y = (Math.sin(heading * Math.PI / 180) * 2) + this.yOffset;
+
+   this.show();
+  //console.log("it is", this.y);
 
   };
 }
->>>>>>> Stashed changes
-=======
-  this.update = function(){
-   console.log('updating', this.x);
-   this.y += 5;
-    this.x = xVal;
-  };
-}
->>>>>>> 1c5851e
