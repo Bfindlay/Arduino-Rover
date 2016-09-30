@@ -6,6 +6,9 @@ body{
   background-size: cover;
 }
 
+#mapbox{
+
+}
 .main-flex{
     display: flex;
     height: 40vh;
@@ -17,6 +20,18 @@ body{
     z-index:1;
     overflow: hidden;
     text-align: center;
+}
+.stat-flex{
+    display: flex;
+    height: 10vh;
+    background-color: rgba(75, 75, 75, 0.4);
+    padding: 10px;
+    color: #f0f0f0;
+    text-shadow: #000 0px 1px 0px;
+    padding-left : 2em;
+    z-index:1;
+    margin: auto;
+    overflow: hidden;
 }
 .map-flex{
     display: flex;
