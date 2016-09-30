@@ -1,7 +1,12 @@
 'use strict';
 
+
 function setup() {
-  createCanvas(800, 400);
+  
+  let height = $('.map-flex').height();
+  let width = $('.map-flex').width();
+  var canvas  = createCanvas(width, height);
+  canvas.parent('mapbox');
   background(255, 0, 0);
   window.rover = new Rover();
   rover.show();
@@ -13,9 +18,7 @@ function draw() {
 
 
 let plotter = (x, y) => {
-  //  console.log("got a plot", x, y);
-  let xx = (Math.cos(x * Math.PI / 180) * y)+ rover.x;   // move object 17 pixels in direction 257
-  // y += sin(257*pi/180)*17;`
+  let xx = (Math.cos(x * Math.PI / 180) * y)+ rover.x;  
   let yy = (Math.sin(x * Math.PI / 180) * y)+ rover.y;
   fill(255);
   ellipse(xx, yy, 10, 10);
@@ -23,10 +26,9 @@ let plotter = (x, y) => {
 
 
 function Rover(){
-  this.y = 200;
-  this.x = 400;
-  this.xOffset = 400;
-  this.yOffset = 200;
+ 
+  this.y = ( $('.map-flex').height() / 2);
+  this.x = ( $('.map-flex').width() / 2 );
 
   this.show = function(){
     fill(0);
