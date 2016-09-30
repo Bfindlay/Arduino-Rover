@@ -7,7 +7,7 @@ body{
 }
 
 #mapbox{
-
+  overflow: visible;
 }
 .main-flex{
     display: flex;
