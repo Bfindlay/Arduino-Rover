@@ -64,7 +64,7 @@ class Ping {
           ellipse(e[0],e[1], 10, 10);
         }
       });
-    };
+    }
 }
 
 class Rover {
@@ -77,7 +77,7 @@ class Rover {
     fill(0, 255, 0);
     noStroke();
     ellipse(this.x,this.y,5,5);
-  };
+  }
 
   update(heading) {
     //make the new plot in direction pointing 
