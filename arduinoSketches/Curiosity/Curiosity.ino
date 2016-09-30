@@ -31,6 +31,7 @@ void setup() {
   if(!mag.begin())
   {
     /* There was a problem detecting the HMC5883 ... check your connections */
+    Serial.println("Ooops, no HMC5883 detected");
     while(1);
   }
   
@@ -45,7 +46,7 @@ void setup() {
 
   // Add servos to pins 12 and 13
   servoRight.attach(12); 
-  servoLeft.attach(11);
+  servoLeft.attach(13);
 
  
 }
@@ -72,9 +73,6 @@ void loop() {
       break;
     case 'D':
       distance();
-      break;
-    case 'S':
-      STOP();
       break;
   }
  }
@@ -136,11 +134,11 @@ void distance(){
 
 void left(){
     bt.println("{'direction': 'left'}");
-    servoLeft.writeMicroseconds(1200);         // Left wheel clockwise
-    servoRight.writeMicroseconds(1200);        // Right wheel clockwise
+    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+    servoRight.writeMicroseconds(1300);        // Right wheel clockwise
     delay(400);
-   servoLeft.writeMicroseconds(1500);         // stop left
-   servoRight.writeMicroseconds(1500);
+    servoLeft.writeMicroseconds(1500);         // stop left
+    servoRight.writeMicroseconds(1500);         // stop right  
 }
 
 void right(){
@@ -149,30 +147,31 @@ void right(){
     servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
     delay(400); // 0.4 seconds
     servoLeft.writeMicroseconds(1500);         // stop left
-   servoRight.writeMicroseconds(1500);    
+    servoRight.writeMicroseconds(1500);         // stop right
 }
-void STOP(){
-   bt.println("{'direction': 'stop'}");
-   servoLeft.writeMicroseconds(1500);         // stop left
-   servoRight.writeMicroseconds(1500);  
-}
+
 void forward(){
-    //poll compass
+    unsigned long previousMillis = 0;        // will store last time LED was updated
+    const long interval = 1000;
+    unsigned long currentMillis = millis();
+    
     compass();
     bt.println("{'direction': 'forward'}");
-    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
-    servoRight.writeMicroseconds(1200);
-    delay(500); // 0.4 seconds
-    servoLeft.writeMicroseconds(1500);         // stop left
-   servoRight.writeMicroseconds(1500);// Right wheel clockwise
-    
+    servoLeft.writeMicroseconds(1700);        
+    servoRight.writeMicroseconds(1300);
+      
+    if (currentMillis - previousMillis >= interval) {
+      previousMillis = currentMillis;// interval at which to blink (milliseconds)
+      servoLeft.writeMicroseconds(1500);         // stop left
+      servoRight.writeMicroseconds(1500);         // stop right
+    }
 }
 
 void reverse(){
     bt.println("{'direction': 'backwards'}");
-    servoLeft.writeMicroseconds(1200);         // Left wheel clockwise
-    servoRight.writeMicroseconds(1700); 
-    delay(500); // 0.4 seconds
+    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
+    delay(1000); 
     servoLeft.writeMicroseconds(1500);         // stop left
-   servoRight.writeMicroseconds(1500);// Right wheel counterclockwise
-   }
+    servoRight.writeMicroseconds(1500);         // stop right 
+}

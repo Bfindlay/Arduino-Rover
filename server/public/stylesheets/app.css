@@ -8,6 +8,10 @@ body{
 
 #mapbox{
   overflow: visible;
+  z-index: 999;
+}
+#route{
+  z-index: 1;
 }
 .main-flex{
     display: flex;
