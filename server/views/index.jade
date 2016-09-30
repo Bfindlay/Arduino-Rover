@@ -26,8 +26,9 @@ block content
             //console.log("return data",data);
         });
     .row
-        a(class="alert button" onclick='STOP()') Stop
-        a(class="success button" onclick='connect()') Connect
+        .snall-12.large-12.columns.contain
+            a(class="alert button" onclick='STOP()') Stop
+            a(class="success button" onclick='connect()') Connect
             a(class="alert button" onclick='disconnect()') Disconnect
             .switch-toggle.switch-3.switch-candy
                 input#on(name='state-d', type='radio', checked='')
@@ -36,17 +37,20 @@ block content
                 label(for='na', onclick='') Autonomous
                 input#off(name='state-d', type='radio')
                 label(for='off', onclick='') Semi-Autonomous
-                a
+                a   
+        .snall-12.large-12.columns.contain
+            .stat-flex
+                div(id="status") 
+                div(id="heading") 
+                div(id="distance")
+                div(id="canvas")
         .small-12.large-5.columns.contain
             .secondary-flex
                 .terminal-Logs(id="terminal")
                     ul
         .small-12.large-7.columns.contain
             .map-flex
-                div(id="status") 
-                div(id="heading") 
-                div(id="distance")
-                div(id="canvas")
+                div(id='mapbox')
         .small-12.large-6.columns.contain
             .terminal-flex
                 .text-editor.wrap
