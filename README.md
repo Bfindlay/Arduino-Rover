@@ -7,4 +7,4 @@ This project allows an arduino rover to be controlled via a websocket/serial con
 
 ## Usage
 
-![alt tag](https://dl.dropboxusercontent.com/u/14297267/controlPanel.png)
+![alt tag](https://dl.dropboxusercontent.com/u/14297267/ping.png)
