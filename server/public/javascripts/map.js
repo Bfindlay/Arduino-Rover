@@ -1,153 +1,148 @@
 'use strict';
 
-//TODO change the test
-//let detected = [];
-let plots =[];
+
+/*** TODO
+ * Add Plot object s there is ability to show/hide the plot
+ * Display rover with triangle
+ */
+let detected = [];
+let plots = [];
+
 function setup() {
-  let height = $('.map-flex').height();
-  let width = $('.map-flex').width();
-  var canvas  = createCanvas(width, height);
-  canvas.parent('mapbox');
-  window.rover = new Rover();
-  window.ping = new Ping();
-  ping.show();
-  rover.show();
+	let height = $('.map-flex').height();
+	let width = $('.map-flex').width();
+	var canvas = createCanvas(width, height);
+	canvas.parent('mapbox');
+	window.rover = new Rover();
+	window.ping = new Ping();
+	ping.show();
+	rover.show();
 }
 
 function draw() {
-    clear();
-    rover.show();
-    ping.show();
-    drawObstacles();
-    
+	clear();
+	rover.show();
+	ping.show();
+	drawObstacles();
 }
 
 let plotter = (x, y) => {
-  let xx = (Math.cos(x * Math.PI / 180) * y)+ rover.x;  
-  let yy = (Math.sin(x * Math.PI / 180) * y)+ rover.y;
-  detected.push(new Obstacle(xx,yy));
+	let xx = (Math.cos(x * Math.PI / 180) * y) + rover.x;
+	let yy = (Math.sin(x * Math.PI / 180) * y) + rover.y;
+	detected.push(new Obstacle(xx, yy));
 };
 
 class Ping {
-  constructor(){
-    this.x = ($('.map-flex').width() / 2 );
-    this.y = ($('.map-flex').height() / 2);
-    this.radius = 0;
-    this.alpha = 100;
-    this.distance = () => {
-        var a = this.x - this.radius;
-        var b =  this.y - this.radius; 
-        return Math.sqrt( a * a + b * b );
-    };
-  }
-    show() {
-      noFill();
-      stroke(0,255,0, this.alpha - 10);
-      strokeWeight(2);
-      ellipse(this.x, this.y, this.radius +20, this.radius +20);
-      stroke(0,255,0, this.alpha);
-      strokeWeight(5);
-      ellipse(this.x, this.y, this.radius, this.radius);
-      this.update();
-      stroke(0,255,0, this.alpha - 10);
-      strokeWeight(2);
-      ellipse(this.x, this.y, this.radius -20, this.radius-20);
-    }
+	constructor() {
+		this.x = ($('.map-flex').width() / 2);
+		this.y = ($('.map-flex').height() / 2);
+		this.radius = 0;
+		this.alpha = 100;
+		this.distance = () => {
+			var a = this.x - this.radius;
+			var b = this.y - this.radius;
+			return Math.sqrt(a * a + b * b);
+		};
+	}
+	show() {
+		noFill();
+		stroke(0, 255, 0, this.alpha - 10);
+		strokeWeight(2);
+		ellipse(this.x, this.y, this.radius + 20, this.radius + 20);
+		stroke(0, 255, 0, this.alpha);
+		strokeWeight(5);
+		ellipse(this.x, this.y, this.radius, this.radius);
+		this.update();
+		stroke(0, 255, 0, this.alpha - 10);
+		strokeWeight(2);
+		ellipse(this.x, this.y, this.radius - 20, this.radius - 20);
+	}
 
-    update(){
-      if(this.radius > this.x * 2){
-        this.radius = 0;
-        this.alpha = 200;
-      }else{
-        this.radius += 3;
-        this.alpha --;
-      }
-    }
+	update() {
+		if (this.radius > this.x * 2) {
+			this.radius = 0;
+			this.alpha = 200;
+		} else {
+			this.radius += 3;
+			this.alpha--;
+		}
+	}
 }
 
 class Rover {
- 
- constructor(){
-    this.y = ( $('.map-flex').height() / 2);
-    this.x = ( $('.map-flex').width() / 2 );
- }
-  show() {
-    fill(0, 255, 0);
-    noStroke();
-    ellipse(this.x,this.y,5,5);
-  }
 
-  update(heading) {
-    //make the new plot in direction pointing 
-    this.x = (Math.cos(heading * Math.PI / 180) * 1.5)+ this.x;   // offset x = width/2 initially
-    this.y = (Math.sin(heading * Math.PI / 180) * 1.5)+ this.y;  // offset y = height/2 initially
-    plots.push([this.x,this.y]);
-    //ellipse(this.x, this.y, 5, 5); // draw the new point;
-  }
+	constructor() {
+		this.y = ($('.map-flex').height() / 2);
+		this.x = ($('.map-flex').width() / 2);
+	}
+	show() {
+		fill(255, 255, 0);
+		noStroke();
+		ellipse(this.x, this.y, 10, 10);
+	}
+
+	update(heading) {
+		this.x = (Math.cos(heading * Math.PI / 180) * 1.5) + this.x; // offset x = width/2 initially
+		this.y = (Math.sin(heading * Math.PI / 180) * 1.5) + this.y; // offset y = height/2 initially
+		plots.push([this.x, this.y]);
+	}
 }
 
 class Obstacle {
-  constructor(x,y){
-    this.x = x;
-    this.y = y;
-    this.distance = () => {
-      var a = this.x - ($('.map-flex').width() / 2);
-      var b = this.y - ($('.map-flex').height() / 2);
-      return Math.sqrt( a * a + b * b );
-    };
-    this.alpha = 0;
-    this.distance = this.distance();
-  }
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+		this.distance = () => {
+			var a = this.x - ($('.map-flex').width() / 2);
+			var b = this.y - ($('.map-flex').height() / 2);
+			return Math.sqrt(a * a + b * b);
+		};
+		this.alpha = 0;
+		this.distance = this.distance();
+	}
 
-  update(){
-    this.alpha -= 10;
-    if (this.alpha < 0) {
-      this.alpha = 0;
-    }
-  }
+	update() {
+		this.alpha -= 10;
+		if (this.alpha < 0) {
+			this.alpha = 0;
+		}
+	}
 
-  show(){
-    const pingDist = this.distance - (ping.radius/2);
-     if (pingDist < 30 && pingDist > -30) {
-      this.alpha = 175;
-    }  
-    if (pingDist < 20 && pingDist > -20) {
-      this.alpha = 200;
-    }  
-    this.update();
-    fill(255, 255, 255, this.alpha);
-    noStroke();
-    ellipse(this.x,this.y,15,15);
-  }
+	show() {
+		const pingDist = this.distance - (ping.radius / 2);
+		if (pingDist < 30 && pingDist > -30) {
+			this.alpha = 175;
+		}
+		if (pingDist < 20 && pingDist > -20) {
+			this.alpha = 200;
+		}
+		this.update();
+		fill(0, 255, 0, this.alpha);
+		noStroke();
+		ellipse(this.x, this.y, 10, 10);
+	}
 }
 
-let sonarDistance = (a, b) => {
-  var x = a - ($('.map-flex').width() / 2);
-  var y = b - ($('.map-flex').height() / 2);
-  return Math.floor(Math.sqrt( a * a + b * b ));
-};
-
 let drawObstacles = () => {
-  detected.forEach(e => {
-      e.show();
-    });
+	detected.forEach(e => {
+		e.show();
+	});
 };
 
 new p5((p) => {
-  p.setup = function () {
-    let height = $('.map-flex').height();
-    let width = $('.map-flex').width();
-    let canv =  p.createCanvas(width, height);
-    canv.parent('route');
-  };
+	p.setup = function () {
+		let height = $('.map-flex').height();
+		let width = $('.map-flex').width();
+		let canv = p.createCanvas(width, height);
+		canv.parent('route');
+	};
 
-  p.draw = () => {
-    // plots.forEach(e => {
-    //   fill(0, 255, 0);
-    //   noStroke();
-    //   ellipse(e[0], e[1], 5, 5);
-    // });
-  };
+	p.draw = () => {
+		plots.forEach(e => {
+		  fill(255, 0, 0, 60);
+		  noStroke();
+		  ellipse(e[0], e[1], 5, 5);
+		});
+	};
 });
-let detected = [new Obstacle(500,200),new Obstacle(30,50),new Obstacle(200,20),new Obstacle(200,100),new Obstacle(340,50)]
-
+// FOR TESTING let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)]
