@@ -151,17 +151,17 @@ void right(){
 }
 
 void forward(){
-    unsigned long previousMillis = 0;        // will store last time LED was updated
-    const long interval = 1000;
-    unsigned long currentMillis = millis();
+    unsigned long finish = millis() +3000;        
+    const long interval = 2000; // run for 3 seconds
+    unsigned long start  = millis();
     
     compass();
     bt.println("{'direction': 'forward'}");
     servoLeft.writeMicroseconds(1700);        
     servoRight.writeMicroseconds(1300);
       
-    if (currentMillis - previousMillis >= interval) {
-      previousMillis = currentMillis;// interval at which to blink (milliseconds)
+    if (currentMillis - start >  interval) {
+      start = currentMillis;
       servoLeft.writeMicroseconds(1500);         // stop left
       servoRight.writeMicroseconds(1500);         // stop right
     }
