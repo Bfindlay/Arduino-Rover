@@ -3,30 +3,56 @@ block content
     script(src="https://cdn.socket.io/socket.io-1.4.5.js")
     script(src='/javascripts/vendor/p5.js')
     script.
+        'use strict';
         var state;
         var socket = io.connect();
         var dialogue = document.getElementById('terminal');
-        socket.on('connected', function(){
+        socket.on('connected', () => {
             state = true;
             var status = document.getElementById('status');
             status.innerHTML = "Status: Connected";
             console.log("connection");
         });
-        socket.on('disconnect', function(){
+        socket.on('disconnect', () => {
             state = false;
             var status = document.getElementById('status');
             status.innerHTML = "Status: Disconnected";
             console.log("disconnect");
         });
-        socket.on('data', function (data) {
+        socket.on('data', data => {
             console.log("received data",data);
         });
-        socket.on('return', function (data) {
+        socket.on('return', data =>  {
             document.getElementById('distance').value = data;
             //console.log("return data",data);
         });
+        socket.on('ports', data => {
+            if(!data.length){
+                 $('#ports').append('<h3>No COM Ports Available</h3>');
+            }else{
+            $('#ports').append('<h3> Please Choose a com port</h3>');
+            data.forEach(e => {
+                $('#selector').append(new Option(e.comName, e.comName));
+            });
+            }
+        });
+        let portSelect = () => {
+            let selected = { data : $('#selector').val()};
+            $.ajax({
+                type: "POST",
+                url: '/port',
+                data: selected,
+                dataType: "json"
+                });
+                disconnect();
+                connect();
+            $('#ports').css('display','none');
+        }
+    #ports
+        select(id='selector')
+        a(class="success button" onclick='portSelect()') Connect to Port
     .row
-        .snall-12.large-12.columns.contain
+        .small-12.large-12.columns.contain
             a(class="alert button" onclick='STOP()') Stop
             a(class="success button" onclick='connect()') Connect
             a(class="alert button" onclick='disconnect()') Disconnect
