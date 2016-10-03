@@ -134,4 +134,3 @@ socket.on('heading', (data) => {
     rover.update(heading);
 });
 
-
