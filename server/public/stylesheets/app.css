@@ -308,3 +308,9 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
     width: 300px;
     height: 150px;
 }
+
+
+/********* PORTS *******/
+#ports{
+  color: #fff;
+}
