@@ -9,14 +9,12 @@ block content
         var dialogue = document.getElementById('terminal');
         socket.on('connected', () => {
             state = true;
-            var status = document.getElementById('status');
-            status.innerHTML = "Status: Connected";
+            document.getElementById('status').innerHTML = "Status: Connected";
             console.log("connection");
         });
         socket.on('disconnect', () => {
             state = false;
-            var status = document.getElementById('status');
-            status.innerHTML = "Status: Disconnected";
+           document.getElementById('status').innerHTML = "Status: Disconnected";
             console.log("disconnect");
         });
         socket.on('data', data => {
@@ -24,13 +22,12 @@ block content
         });
         socket.on('return', data =>  {
             document.getElementById('distance').value = data;
-            //console.log("return data",data);
         });
         socket.on('ports', data => {
-            if(!data.length){
+            if(!data.length > 0){
                  $('#ports').append('<h3>No COM Ports Available</h3>');
             }else{
-            $('#ports').append('<h3> Please Choose a com port</h3>');
+            $('#ports').append('<h4> Please Choose a com port</h4>');
             data.forEach(e => {
                 $('#selector').append(new Option(e.comName, e.comName));
             });

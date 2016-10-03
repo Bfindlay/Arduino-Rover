@@ -4,7 +4,7 @@ let logs = [];
 
 (() => {
       $('.terminal').typeIt({
-     strings: ['Initialising rover uplink','Rover uplink connection Successful', "rover is ready"],
+     strings: ['Rover awaiting Initialisation'],
      speed: 15,
     });
 })();
@@ -53,7 +53,6 @@ let refreshMap = () => {
 
 let left = () => {
     addLog();
-    
     let strings =  ["Sending left turn command", "waiting for rover response",  (state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
          strings: strings,
@@ -121,13 +120,13 @@ setInterval(getHeading, 1000);
 var heading;
 var distance;
 
-socket.on('distance', (data)=> {
+socket.on('distance', data => {
     document.getElementById('distance').innerHTML = "Distance: "+ data.distance;
     distance = data.distance;
 });
 
 
-socket.on('heading', (data) => {
+socket.on('heading', data => {
     heading = data.heading;
     document.getElementById('heading').innerHTML = "Heading: "+ data.heading;
     plotter(heading, distance);

@@ -153,10 +153,9 @@ new p5((p) => {
 
 
 
-function drawPlane(){
+let  drawPlane = () => {
   let x = ($('.map-flex').width() / 2);
 	let y = ($('.map-flex').height() / 2);
-
   textSize(11);
   translate(x, y);
   fill(0,255,0);
@@ -164,7 +163,6 @@ function drawPlane(){
   text("40", 120, 20); 
   text("60", 210, 20); 
   //fill(0, 102, 153);
-
   noFill();
   strokeWeight(2);
   stroke(0,255,0,30);

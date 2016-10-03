@@ -21,47 +21,44 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-
 let connect = port => {
+	/*** SERIAL PORT CONNECTION */
 	console.log("connecting");
 	serialport = new SerialPort(port, {
 		parser: SerialPort.parsers.byteDelimiter([123,125])
 	});
 	serialport.on('open', function() {
-	// Now server is connected to Arduino
-	console.log('Serial Port open');
-	io.sockets.on('connection', socket => {
-		//  Connecting to client 
-		console.log('Socket connected');
-		socket.emit('connected');
-
-		serialport.on('data', data => {
-			let result = safeParse(new Buffer(data));
-			//  TODO handle when result is undefined
-			console.log(result);
-			if (result !== undefined) {
-				if (result.heading !== undefined) {
-					socket.emit('heading', result);
-				} else if (result.distance !== undefined) {
-					socket.emit('distance', result);
-				} else {
-					//  direction object
-					socket.emit('return', result);
+		// Now server is connected to Arduino
+		console.log('Serial Port open');
+		io.sockets.on('connection', socket => {
+			//  Connecting to client 
+			console.log('Socket connected');
+			socket.emit('connected');
+			serialport.on('data', data => {
+				let result = safeParse(new Buffer(data));
+				console.log(result);
+				if (result !== undefined) {
+					if (result.heading !== undefined) {
+						socket.emit('heading', result);
+					} else if (result.distance !== undefined) {
+						socket.emit('distance', result);
+					} else {
+						socket.emit('return', result); //  direction object
+					}
 				}
-			}
+			});
+			serialport.on('error', err =>{
+				console.log(err);
+			});
+			socket.on('data', data => {
+				console.log("data" + data);
+				serialport.write(data);
+			});
+			process.on('uncaughtException', err =>{
+				console.log(err);
+			});
 		});
-		serialport.on('error', err =>{
-			console.log(err);
-		});
-		socket.on('data', data => {
-			console.log("data" + data);
-			serialport.write(data);
-		});
-		process.on('uncaughtException', err =>{
-			console.log(err);
-		})
 	});
-});
 };
 
 //TODO handle undefined
@@ -73,8 +70,6 @@ let safeParse = data => {
 	}
 };
 
-
-/*** SERIAL PORT CONNECTION */
 serialport.on('error', function(err) {
 	console.log("there was an error", err);
 	io.sockets.on('connection', function(socket){
@@ -84,8 +79,6 @@ serialport.on('error', function(err) {
 		});
 	});
 });
-
-
 
 servers.listen(process.env.port || 3000, function() {
 	console.log("running");
