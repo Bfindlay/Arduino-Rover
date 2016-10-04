@@ -47,14 +47,14 @@ let connect = port => {
 					}
 				}
 			});
-			serialport.on('error', err =>{
+			serialport.on('error', err => {
 				console.log(err);
 			});
 			socket.on('data', data => {
 				console.log("data" + data);
 				serialport.write(data);
 			});
-			process.on('uncaughtException', err =>{
+			process.on('uncaughtException', err => {
 				console.log(err);
 			});
 		});

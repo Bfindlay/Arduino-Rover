@@ -23,9 +23,9 @@ block content
         });
         socket.on('ports', data => {
             if(!data.length > 0){
-                 $('#ports').append('<h3>No COM Ports Available</h3>');
+                 $('#portID').append('<h3>No COM Ports Available</h3>');
             }else{
-            $('#ports').append('<h4> Please Choose a com port</h4>');
+            $('#portID').append('<h4> Please Choose a com port</h4>');
             data.forEach(e => {
                 $('#selector').append(new Option(e.comName, e.comName));
             });
@@ -40,12 +40,8 @@ block content
                 dataType: "json"
                 });
                 disconnect();
-                connect();
             $('#ports').css('display','none');
         }
-    #ports
-        select(id='selector')
-        a(class="success button" onclick='portSelect()') Connect to Port
     .row
         .small-12.large-12.columns.contain
             a(class="alert button" onclick='STOP()') Stop
@@ -68,7 +64,7 @@ block content
                 div(id="distance")
                 div(id="canvas")
         .small-12.large-5.columns.contain
-            .secondary-flex
+             .secondary-flex
                 .terminal-Logs(id="terminal")
                     ul
         .small-12.large-7.columns.contain
@@ -101,6 +97,11 @@ block content
                         .grid-column
                             a(onclick='reverse()')
                                 span.bottom
-                        .grid-column 
+                        .grid-column
+        .small-12.columns
+            #portID
+            #ports
+                select(id='selector')
+                a(class="success button" onclick='portSelect()') Connect to Port
     
       

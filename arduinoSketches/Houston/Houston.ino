@@ -36,8 +36,6 @@ void setup() {
 
 
 
-
-
 void loop() {
 
   //Test sending bluetooth command to slave

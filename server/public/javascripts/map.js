@@ -1,19 +1,14 @@
 'use strict';
 
-
 /*** TODO
- * Add Plot object s there is ability to show/hide the plot
  * Display rover with triangle
  */
 
 
 //let detected = [];
 
-// TODO FOR TESTING , REMOVE AND REPLACE
-let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)];
 
-
-let plots = [];
+//let plots = [];
 let display = true;
 function setup() {
 	let height = $('.map-flex').height();
@@ -31,7 +26,7 @@ function draw() {
 	rover.show();
 	ping.show();
 	drawObstacles();
-  background(0,255,0,5);
+	background(0,255,0,5);
 }
 
 let plotter = (x, y) => {
@@ -52,6 +47,7 @@ class Ping {
 			return Math.sqrt(a * a + b * b);
 		};
 	}
+
 	show() {
 		noFill();
 		stroke(0, 255, 0, this.alpha - 10);
@@ -61,7 +57,7 @@ class Ping {
 		strokeWeight(5);
 		ellipse(this.x, this.y, this.radius, this.radius);
 		this.update();
-    fill(0,255,0, 7);
+    	fill(0,255,0, 7);
 		stroke(0, 255, 0, this.alpha - 10);
 		strokeWeight(2);
 		ellipse(this.x, this.y, this.radius - 25, this.radius - 25);
@@ -88,6 +84,9 @@ class Rover {
 		fill(255, 255, 0);
 		noStroke();
 		ellipse(this.x, this.y, 10, 10);
+		beginShape();
+		triangle(this.x, this.y, this.x+50, this.y-50, this.x-50, this.y+50);
+		endShape();
 	}
 
 	update(heading) {
@@ -108,6 +107,7 @@ class Plot {
     noStroke();
     ellipse(this.x, this.y, 5, 5);
   }
+
   hide() {
     fill(0,0);
     noStroke();
@@ -126,11 +126,11 @@ class Obstacle {
 		};
 		this.alpha = 0;
 		this.distance = this.distance();
-    this.delta = () => { return (this.distance > 300) ? 6 : (this.distance > 200) ? 3 : 1;};
+		this.delta = () => { return (this.distance > 300) ? 6 : (this.distance > 200) ? 3 : 1;};
 	}
 
 	update() {
-		this.alpha -= 5;
+		this.alpha -= 2;
 		if (this.alpha < 0) {
 			this.alpha = 0;
 		}
@@ -138,16 +138,19 @@ class Obstacle {
 
 	show() {
 		const pingDist = this.distance - (ping.radius / 2);
-		if (pingDist < 30 && pingDist > -30) {
-			this.alpha = 125;
+		 if(pingDist < 10 && pingDist > -10) {
+			this.alpha = 250;
 		}
-		if (pingDist < 20 && pingDist > -20) {
-			this.alpha = 150;
+		else if (pingDist < 15 && pingDist > -15) {
+			this.alpha = 100;
+		}
+		else if (pingDist < 20 && pingDist > -20) {
+			this.alpha = 40;
 		}
 		this.update();
-		fill(0, 255, 0, this.alpha/this.delta());
+		fill(81, 254,13, this.alpha/this.delta());
 		noStroke();
-		ellipse(this.x, this.y, 10, 10);
+		ellipse(this.x, this.y, 12, 12);
 	}
 }
 
@@ -156,6 +159,7 @@ let drawObstacles = () => {
 		e.show();
 	});
 };
+
 
 new p5((p) => {
 	p.setup = function () {
@@ -176,7 +180,7 @@ new p5((p) => {
 
 let  drawPlane = () => {
   let x = ($('.map-flex').width() / 2);
-	let y = ($('.map-flex').height() / 2);
+  let y = ($('.map-flex').height() / 2);
   textSize(11);
   translate(x, y);
   fill(0,255,0);
@@ -186,9 +190,13 @@ let  drawPlane = () => {
   //fill(0, 102, 153);
   noFill();
   strokeWeight(2);
-  stroke(0,255,0,30);
+  stroke(0,255,0,10);
   ellipse(0, 0, 100, 100);
   ellipse(0, 0, 200, 200);
   ellipse(0, 0, 400, 400);
   ellipse(0, 0, 600, 600);
 };
+
+// TODO FOR TESTING , REMOVE AND REPLACE
+let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)];
+let plots = [new Plot(0,0),new Plot(10,102),new Plot(0,0),new Plot(0,0),new Plot(0,0),new Plot(0,0),];

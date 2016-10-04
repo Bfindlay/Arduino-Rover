@@ -314,3 +314,6 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
 #ports{
   color: #fff;
 }
+#portID {
+  color : #fff;
+}

@@ -50,6 +50,7 @@ void setup() {
 
  
 }
+
 void loop() {
 
   char c;
@@ -151,7 +152,7 @@ void right(){
 }
 
 void forward(){
-    unsigned long finish = millis() +3000;        
+    unsigned long finish = millis() + 3000;        
     const long interval = 2000; // run for 3 seconds
     unsigned long start  = millis();
     

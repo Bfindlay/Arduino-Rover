@@ -1,6 +1,20 @@
-"use strict";
+'use strict';
 
 let logs = [];
+
+
+
+document.addEventListener("keydown",e  => {
+    if(e.key == "ArrowRight"){
+        right();
+    }else if(e.key == "ArrowLeft"){
+        left();
+    }else if(e.key == "ArrowUp"){
+        forwards();
+    }else if(e.key == "ArrowDown"){
+        reverse();
+    }
+});
 
 (() => {
       $('.terminal').typeIt({
@@ -116,7 +130,7 @@ let hidePlot = () => {
     display = !display;
 };
 
-let clearPlot = () => {
+let clearPlot = () => { 
     plots = [];
 };
 let getDistance = () => {
