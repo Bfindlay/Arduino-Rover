@@ -1,7 +1,5 @@
 extends layout
 block content
-    script(src="https://cdn.socket.io/socket.io-1.4.5.js")
-    script(src='/javascripts/vendor/p5.js')
     script.
         'use strict';
         var state;
@@ -60,7 +58,9 @@ block content
                 label(for='na', onclick='') Autonomous
                 input#off(name='state-d', type='radio')
                 label(for='off', onclick='') Semi-Autonomous
-                a   
+                a
+            a(class="button small" onclick='clearPlot()' id='clearPlot') Clear Plots
+            a(class="button small" onclick='hidePlot()' id='hidePlot') Hide Plots
         .snall-12.large-12.columns.contain
             .stat-flex
                 div(id="status") 
@@ -102,7 +102,5 @@ block content
                             a(onclick='reverse()')
                                 span.bottom
                         .grid-column 
-    script(src="javascripts/vendor/typeit.min.js")
-    script(src='javascripts/vendor/rover.js')
-    script(src='/javascripts/map.js')
+    
       

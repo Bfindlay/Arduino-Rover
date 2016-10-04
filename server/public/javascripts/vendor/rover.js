@@ -106,7 +106,19 @@ let addLog = () => {
     }
 };
 
+let hidePlot = () => {
+    console.log("running");
+    if(display){
+        $('#hidePlot').text('Hide Plots');
+    }else{
+        $('#hidePlot').text('Show Plots');
+    }
+    display = !display;
+};
 
+let clearPlot = () => {
+    plots = [];
+};
 let getDistance = () => {
     socket.emit('data', 'D');
 };

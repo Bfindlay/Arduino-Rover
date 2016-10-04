@@ -61,7 +61,6 @@ let connect = port => {
 	});
 };
 
-//TODO handle undefined
 let safeParse = data => {
 	try {
 		return JSON.parse(data.toString().replace(/\s/g, '').replace(/'/g, '"'));

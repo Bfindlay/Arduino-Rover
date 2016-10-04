@@ -5,9 +5,16 @@
  * Add Plot object s there is ability to show/hide the plot
  * Display rover with triangle
  */
-//let detected = [];
-let plots = [];
 
+
+//let detected = [];
+
+// TODO FOR TESTING , REMOVE AND REPLACE
+let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)];
+
+
+let plots = [];
+let display = true;
 function setup() {
 	let height = $('.map-flex').height();
 	let width = $('.map-flex').width();
@@ -86,8 +93,26 @@ class Rover {
 	update(heading) {
 		this.x = (Math.cos(heading * Math.PI / 180) * 1.5) + this.x; // offset x = width/2 initially
 		this.y = (Math.sin(heading * Math.PI / 180) * 1.5) + this.y; // offset y = height/2 initially
-		plots.push([this.x, this.y]);
+		plots.push(new Plot(this.x, this.y));
 	}
+}
+
+class Plot {
+  constructor(x,y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  show() {
+    fill(255, 0, 0, 60);
+    noStroke();
+    ellipse(this.x, this.y, 5, 5);
+  }
+  hide() {
+    fill(0,0);
+    noStroke();
+    ellipse(this.x, this.y, 1, 1)
+  }
 }
 
 class Obstacle {
@@ -143,15 +168,11 @@ new p5((p) => {
 	p.draw = () => {
     drawPlane();
     fill(255,0,0,20);
-		plots.forEach(e => {
-		  fill(255, 0, 0, 60);
-		  noStroke();
-		  ellipse(e[0], e[1], 5, 5);
-		});
+      plots.forEach(e => {
+         (display) ? e.show() : e.hide();
+      });
 	};
 });
-
-
 
 let  drawPlane = () => {
   let x = ($('.map-flex').width() / 2);
@@ -170,6 +191,4 @@ let  drawPlane = () => {
   ellipse(0, 0, 200, 200);
   ellipse(0, 0, 400, 400);
   ellipse(0, 0, 600, 600);
-}
-// FOR TESTING 
-let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)]
+};
