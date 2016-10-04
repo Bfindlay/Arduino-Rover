@@ -70,7 +70,7 @@ let safeParse = data => {
 };
 
 serialport.on('error', function(err) {
-	console.log("there was an error", err);
+	console.log("Please choose a COM port");
 	io.sockets.on('connection', function(socket){
 		SerialPort.list(function (err, ports) {
 			let availPorts = ports.filter( p =>  p.comName !== undefined);
@@ -80,7 +80,7 @@ serialport.on('error', function(err) {
 });
 
 servers.listen(process.env.port || 3000, function() {
-	console.log("running");
+	console.log("Server Running");
 });
 
 app.post('/port', function(req, res){

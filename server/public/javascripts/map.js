@@ -2,13 +2,13 @@
 
 /*** TODO
  * Display rover with triangle
+ * Fix plot displaying
  */
 
+// let detected = [];
 
-//let detected = [];
 
-
-//let plots = [];
+// let plots = [];
 let display = true;
 function setup() {
 	let height = $('.map-flex').height();
@@ -103,9 +103,9 @@ class Plot {
   }
 
   show() {
-    fill(255, 0, 0, 60);
+    fill(255, 0, 0);
     noStroke();
-    ellipse(this.x, this.y, 5, 5);
+    ellipse(this.x, this.y, 10, 10);
   }
 
   hide() {
@@ -182,21 +182,20 @@ let  drawPlane = () => {
   let x = ($('.map-flex').width() / 2);
   let y = ($('.map-flex').height() / 2);
   textSize(11);
-  translate(x, y);
   fill(0,255,0);
-  text("10", 60, 20); 
-  text("40", 120, 20); 
-  text("60", 210, 20); 
+  text("10", x+60, y+20); 
+  text("40", x+120, y+20); 
+  text("60", x+210, y+20); 
   //fill(0, 102, 153);
   noFill();
   strokeWeight(2);
   stroke(0,255,0,10);
-  ellipse(0, 0, 100, 100);
-  ellipse(0, 0, 200, 200);
-  ellipse(0, 0, 400, 400);
-  ellipse(0, 0, 600, 600);
+  ellipse(x, y, 100, 100);
+  ellipse(x, y, 200, 200);
+  ellipse(x, y, 400, 400);
+  ellipse(x, y, 600, 600);
 };
 
 // TODO FOR TESTING , REMOVE AND REPLACE
 let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)];
-let plots = [new Plot(0,0),new Plot(10,102),new Plot(0,0),new Plot(0,0),new Plot(0,0),new Plot(0,0),];
+let plots = [new Plot(200,100),new Plot(100,102),new Plot(100,203),new Plot(110,205),new Plot(115,200),new Plot(120,150),];

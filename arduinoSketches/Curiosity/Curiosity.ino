@@ -42,7 +42,7 @@ void setup() {
   //Trigger and echo pins for the ultrasonic sensor
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
-
+  pinMode(A0, INPUT);
 
   // Add servos to pins 12 and 13
   servoRight.attach(12); 
@@ -161,11 +161,6 @@ void forward(){
     servoLeft.writeMicroseconds(1700);        
     servoRight.writeMicroseconds(1300);
       
-    if (currentMillis - start >  interval) {
-      start = currentMillis;
-      servoLeft.writeMicroseconds(1500);         // stop left
-      servoRight.writeMicroseconds(1500);         // stop right
-    }
 }
 
 void reverse(){

@@ -25,7 +25,6 @@ block content
             if(!data.length > 0){
                  $('#portID').append('<h3>No COM Ports Available</h3>');
             }else{
-            $('#portID').append('<h4> Please Choose a com port</h4>');
             data.forEach(e => {
                 $('#selector').append(new Option(e.comName, e.comName));
             });
@@ -40,6 +39,7 @@ block content
                 dataType: "json"
                 });
                 disconnect();
+                connect();
             $('#ports').css('display','none');
         }
     .row
