@@ -59,6 +59,9 @@ let connect = port => {
 			});
 		});
 	});
+	Serialport.on('error' , e => {
+		console.log(e);
+	})
 };
 
 let safeParse = data => {
