@@ -3,6 +3,8 @@
 /*** TODO
  * Display rover with triangle
  * Fix plot displaying
+ * Wait for response before sending any more commands -> Reduce serial traffic /spamming
+ * Fix connected to port message when cnnected to wrong port 
  */
 
 // let detected = [];
@@ -10,6 +12,7 @@
 
 // let plots = [];
 let display = true;
+let displayDetected = false;
 function setup() {
 	let height = $('.map-flex').height();
 	let width = $('.map-flex').width();
@@ -21,12 +24,21 @@ function setup() {
 	rover.show();
 }
 
+let x = ($('.map-flex').width());
+let y = ($('.map-flex').height());
+
 function draw() {
 	clear();
 	rover.show();
 	ping.show();
 	drawObstacles();
 	background(0,255,0,5);
+	textSize(20);
+  	fill(0, 255,0, 100);
+	let stateString =  (window.state) ? "Connected" : "Disconnected";
+  	text("Distance: " + distance, 10, y -10); 
+  	text("Heading: " + heading, 200, y -10); 
+	text("Status: "+ stateString, 400, y -10); 
 }
 
 let plotter = (x, y) => {
@@ -40,7 +52,7 @@ class Ping {
 		this.x = ($('.map-flex').width() / 2);
 		this.y = ($('.map-flex').height() / 2);
 		this.radius = 0;
-		this.alpha = 220;
+		this.alpha = 250;
 		this.distance = () => {
 			var a = this.x - this.radius;
 			var b = this.y - this.radius;
@@ -50,7 +62,7 @@ class Ping {
 
 	show() {
 		noFill();
-		stroke(0, 255, 0, this.alpha - 10);
+		stroke(0, 255, 0, this.alpha - 4);
 		strokeWeight(2);
 		ellipse(this.x, this.y, this.radius + 20, this.radius + 20);
 		stroke(0, 255, 0, this.alpha);
@@ -58,7 +70,7 @@ class Ping {
 		ellipse(this.x, this.y, this.radius, this.radius);
 		this.update();
     	fill(0,255,0, 7);
-		stroke(0, 255, 0, this.alpha - 10);
+		stroke(0, 255, 0, this.alpha - 4);
 		strokeWeight(2);
 		ellipse(this.x, this.y, this.radius - 25, this.radius - 25);
 	}
@@ -68,8 +80,8 @@ class Ping {
 			this.radius = 0;
 			this.alpha = 200;
 		} else {
-			this.radius += 3;
-			this.alpha--;
+			this.radius += 5;
+			this.alpha --;
 		}
 	}
 }
@@ -138,13 +150,13 @@ class Obstacle {
 
 	show() {
 		const pingDist = this.distance - (ping.radius / 2);
-		 if(pingDist < 10 && pingDist > -10) {
+		 if(pingDist < 15 && pingDist > -15) {
 			this.alpha = 250;
 		}
-		else if (pingDist < 15 && pingDist > -15) {
+		else if (pingDist < 25 && pingDist > -25) {
 			this.alpha = 100;
 		}
-		else if (pingDist < 20 && pingDist > -20) {
+		else if (pingDist < 30 && pingDist > -30) {
 			this.alpha = 40;
 		}
 		this.update();
@@ -152,11 +164,17 @@ class Obstacle {
 		noStroke();
 		ellipse(this.x, this.y, 12, 12);
 	}
+
+	toggle() {
+		fill(81, 254,13, 100);
+		noStroke();
+		ellipse(this.x, this.y, 12, 12);
+	}
 }
 
 let drawObstacles = () => {
 	detected.forEach(e => {
-		e.show();
+		(displayDetected) ? e.toggle() : e.show();
 	});
 };
 
