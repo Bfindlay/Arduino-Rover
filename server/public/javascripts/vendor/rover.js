@@ -6,35 +6,51 @@ let logs = [];
 
 document.addEventListener("keydown",e  => {
     if(e.key == "ArrowRight"){
+        $('.right').css('border', '0.5em solid #e74c3c');
         right();
+        setTimeout(() => {
+            $('.right').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
+        },150);
     }else if(e.key == "ArrowLeft"){
+        $('.left').css('border', '0.5em solid #e74c3c');
         left();
+        setTimeout(() => {
+            $('.left').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
+        },150);
     }else if(e.key == "ArrowUp"){
+        $('.top').css('border', '0.5em solid #e74c3c');
         forwards();
+        setTimeout(() => {
+            $('.top').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
+        },150);
     }else if(e.key == "ArrowDown"){
+        $('.bottom').css('border', '0.5em solid #e74c3c');
         reverse();
+        setTimeout(() => {
+            $('.bottom').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
+        },150);
     }
 });
 
 (() => {
       $('.terminal').typeIt({
      strings: ['Rover awaiting Initialisation'],
-     speed: 15,
+     speed: 1,
     });
 })();
 
 let STOP = () => {
     $('.terminal').typeIt({
-        strings: ["Stopping rover", (state) ? "Success" : "Failed"],
-        speed: 20
+        strings: ["Stopping rover", (window.state) ? "Success" : "Failed"],
+        speed: 1
       });
     socket.emit('data', 'S');
 };
 
 let connect = () => {
      $('.terminal').typeIt({
-        strings: ["Establishing uplink connection to rover ","Initialising .........." ,"success"],
-        speed: 20,
+        strings: ["Establishing uplink connection to rover ","Initialising .........." ,(window.state) ? "Success" : "Failed"],
+        speed: 1,
       });
       socket.connect();
       addLog();
@@ -42,8 +58,8 @@ let connect = () => {
 
 let disconnect = () => {
      $('.terminal').typeIt({
-        strings: ["Closing rover connection", "success"],
-        speed: 10
+        strings: ["Closing rover connection", (window.state) ? "Success" : "Failed"],
+        speed: 1
       });
       socket.disconnect();
       addLog();
@@ -67,7 +83,7 @@ let refreshMap = () => {
 
 let left = () => {
     addLog();
-    let strings =  ["Sending left turn command", "waiting for rover response",  (state) ? "Success" : "Failed"];
+    let strings =  ["Sending left turn command", "waiting for rover response",  (window.state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
          strings: strings,
          speed: 10
@@ -79,7 +95,7 @@ let left = () => {
 };
 
 let right = () => {
-    let strings = ["Sending right turn command", "waiting for rover response", (state) ? "Success" : "Failed"];
+    let strings = ["Sending right turn command", "waiting for rover response", (window.state) ? "Success" : "Failed"];
     addLog();
     $('.terminal').typeIt({
          strings: strings,
@@ -87,12 +103,11 @@ let right = () => {
       });
       socket.emit('data', 'R');
       logs.push(strings);
-
-}
+};
 
 let forwards = () => {
      addLog();
-     let strings = ["Sending drive command", "waiting for rover response", (state) ? "Success" : "Failed"];
+     let strings = ["Sending drive command", "waiting for rover response", (window.state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
         strings: strings,
         speed: 10
@@ -104,7 +119,7 @@ let forwards = () => {
 
 let reverse = () => {
      addLog();
-     let strings = ["Sending reverse command", "waiting for rover response", (state) ? "Success" : "Failed"];
+     let strings = ["Sending reverse command", "waiting for rover response", (window.state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
         strings: strings,
         speed: 10
@@ -120,8 +135,18 @@ let addLog = () => {
     }
 };
 
+let hideObstacle = () => {
+    if(displayDetected){
+         $('#hideObstacle').text('Hide Obstacles');
+    }else{
+        $('#hideObstacle').text('Show Obstacles');
+    }
+    displayDetected = !displayDetected;
+};
+let clearObstacle = () => { 
+    detected = [];
+};
 let hidePlot = () => {
-    console.log("running");
     if(display){
         $('#hidePlot').text('Hide Plots');
     }else{

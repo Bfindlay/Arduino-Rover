@@ -2,17 +2,15 @@ extends layout
 block content
     script.
         'use strict';
-        var state;
+        window.state;
         var socket = io.connect();
         var dialogue = document.getElementById('terminal');
         socket.on('connected', () => {
-            state = true;
-            document.getElementById('status').innerHTML = "Status: Connected";
+            window.state = true;
             console.log("connection");
         });
         socket.on('disconnect', () => {
-            state = false;
-           document.getElementById('status').innerHTML = "Status: Disconnected";
+            window.state = false;
             console.log("disconnect");
         });
         socket.on('data', data => {
@@ -57,24 +55,17 @@ block content
                 a
             a(class="button small" onclick='clearPlot()' id='clearPlot') Clear Plots
             a(class="button small" onclick='hidePlot()' id='hidePlot') Hide Plots
-        .snall-12.large-12.columns.contain
-            .stat-flex
-                div(id="status") 
-                div(id="heading") 
-                div(id="distance")
-                div(id="canvas")
-        .small-12.large-5.columns.contain
-             .secondary-flex
-                .terminal-Logs(id="terminal")
-                    ul
-        .small-12.large-7.columns.contain
+            a(class="button small" onclick='clearObstacle()' id='clearObstacle') Clear Obstacles
+            a(class="button small" onclick='hideObstacle()' id='hideObstacle') Show Obstacles
+        .small-12.columns.contain
             .map-flex
                 div(id='mapbox')
                 div(id='route')
         .small-12.large-6.columns.contain
-            .terminal-flex
-                .text-editor.wrap
-                    .terminal
+             .secondary-flex
+                .terminal-Logs(id="terminal")
+                    ul
+                .terminal
         .small-12.large-6.columns.contain
             .main-flex
                 .showgrid
