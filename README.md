@@ -9,6 +9,14 @@ This project allows an arduino rover to be controlled via a websocket/serial con
 
 ![alt tag](https://dl.dropboxusercontent.com/u/14297267/project.png)
 
+## Project crap
+  Problem to solve.
+    1. Navigate unknown terrin, Based off a roomba, Self-driving car?
+
+    
+  1. Need an actuator
+  
+
 ## Documentation
 Bluetooth defined as bt
 Pins;
