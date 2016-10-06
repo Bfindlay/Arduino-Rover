@@ -20,7 +20,6 @@ app.use('/api', api);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
 let connect = port => {
 	/*** SERIAL PORT CONNECTION */
 	console.log("connecting");
