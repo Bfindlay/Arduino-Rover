@@ -51,35 +51,64 @@ void setup() {
  
 }
 
+char dir;
+int dist;
+void readSerial(){
+    char c;
+   if(bt.available()){ // Checks whether data is comming from the serial port
+      c = bt.read();
+      switch (c) {
+      case 'F':
+        forward();
+        break;
+      case 'R':
+        right();
+        break;
+      case 'L':
+        left();
+        break;
+      case 'B':
+        reverse();
+        break;
+      case 'H':
+        compass();
+        break;
+      case 'D':
+        distance();
+        break;
+    }
+  }
+}
 void loop() {
 
-  char c;
- if(bt.available()){ // Checks whether data is comming from the serial port
-    c = bt.read();
-    switch (c) {
+    readSerial();
+    distance();
+    if(dist < 10){
+      dir = 'R';
+    }else{
+      dir = 'F';
+    }
+    Move();
+
+  
+ }
+
+void Move(){
+  switch(dir) {
     case 'F':
       forward();
-      break;
-    case 'R':
-      right();
-      break;
-    case 'L':
-      left();
       break;
     case 'B':
       reverse();
       break;
-    case 'H':
-      compass();
+    case 'L':
+      left();
       break;
-    case 'D':
-      distance();
+    case 'R':
+      right();
       break;
   }
- }
-
 }
-
 void compass(){
    /* Get a new sensor event */ 
   sensors_event_t event; 
@@ -127,6 +156,7 @@ void distance(){
   duration = pulseIn(echoPin, HIGH);
   // convert the time into a distance
   cm = (duration/2) / 29.1;
+  dist = cm;
   bt.print("{'distance': '");
   bt.print(cm);
   bt.print("'}");
@@ -137,37 +167,32 @@ void left(){
     bt.println("{'direction': 'left'}");
     servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
     servoRight.writeMicroseconds(1300);        // Right wheel clockwise
-    delay(400);
-    servoLeft.writeMicroseconds(1500);         // stop left
-    servoRight.writeMicroseconds(1500);         // stop right  
+
 }
 
 void right(){
     bt.println("{'direction': 'right'}");
     servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
-    delay(400); // 0.4 seconds
-    servoLeft.writeMicroseconds(1500);         // stop left
-    servoRight.writeMicroseconds(1500);         // stop right
 }
 
 void forward(){
-    unsigned long finish = millis() + 3000;        
-    const long interval = 2000; // run for 3 seconds
-    unsigned long start  = millis();
     
     compass();
     bt.println("{'direction': 'forward'}");
-    servoLeft.writeMicroseconds(1700);        
-    servoRight.writeMicroseconds(1300);
+    servoLeft.writeMicroseconds(1600);        
+    servoRight.writeMicroseconds(1200);
       
 }
 
 void reverse(){
     bt.println("{'direction': 'backwards'}");
     servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
-    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
-    delay(1000); 
-    servoLeft.writeMicroseconds(1500);         // stop left
-    servoRight.writeMicroseconds(1500);         // stop right 
+    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise  
 }
+
+void STOP(){
+  servoLeft.writeMicroseconds(1500);         // stop left
+  servoRight.writeMicroseconds(1500);
+}
+
