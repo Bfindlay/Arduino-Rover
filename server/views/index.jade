@@ -2,15 +2,15 @@ extends layout
 block content
     script.
         'use strict';
-        window.state;
+        var state = false;
         var socket = io.connect();
         var dialogue = document.getElementById('terminal');
         socket.on('connected', () => {
-            window.state = true;
+            state = true;
             console.log("connection");
         });
         socket.on('disconnect', () => {
-            window.state = false;
+           state = false;
             console.log("disconnect");
         });
         socket.on('data', data => {

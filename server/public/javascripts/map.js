@@ -7,19 +7,21 @@
  * Fix connected to port message when cnnected to wrong port 
  */
 
-// let detected = [];
-
-
-// let plots = [];
+let detected = [];
+let plots = [];
 let display = true;
 let displayDetected = false;
+let rover = null;
+let ping = null;
+let distance = null;
+let heading = null;
 function setup() {
 	let height = $('.map-flex').height();
 	let width = $('.map-flex').width();
 	var canvas = createCanvas(width, height);
 	canvas.parent('mapbox');
-	window.rover = new Rover();
-	window.ping = new Ping();
+	rover = new Rover();
+	ping = new Ping();
 	ping.show();
 	rover.show();
 }
@@ -35,7 +37,7 @@ function draw() {
 	background(0,255,0,5);
 	textSize(20);
   	fill(0, 255,0, 100);
-	let stateString =  (window.state) ? "Connected" : "Disconnected";
+	let stateString =  (state) ? "Connected" : "Disconnected";
   	text("Distance: " + distance, 10, y -10); 
   	text("Heading: " + heading, 200, y -10); 
 	text("Status: "+ stateString, 400, y -10); 
@@ -215,5 +217,5 @@ let  drawPlane = () => {
 };
 
 // TODO FOR TESTING , REMOVE AND REPLACE
-let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)];
-let plots = [new Plot(200,100),new Plot(100,102),new Plot(100,203),new Plot(110,205),new Plot(115,200),new Plot(120,150),];
+// let detected = [new Obstacle(500, 200), new Obstacle(30, 50), new Obstacle(200, 20), new Obstacle(200, 100), new Obstacle(340, 50)];
+// let plots = [new Plot(200,100),new Plot(100,102),new Plot(100,203),new Plot(110,205),new Plot(115,200),new Plot(120,150),];

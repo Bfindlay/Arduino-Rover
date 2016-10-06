@@ -41,7 +41,7 @@ document.addEventListener("keydown",e  => {
 
 let STOP = () => {
     $('.terminal').typeIt({
-        strings: ["Stopping rover", (window.state) ? "Success" : "Failed"],
+        strings: ["Stopping rover", (state) ? "Success" : "Failed"],
         speed: 1
       });
     socket.emit('data', 'S');
@@ -49,7 +49,7 @@ let STOP = () => {
 
 let connect = () => {
      $('.terminal').typeIt({
-        strings: ["Establishing uplink connection to rover ","Initialising .........." ,(window.state) ? "Success" : "Failed"],
+        strings: ["Establishing uplink connection to rover ","Initialising .........." ,(state) ? "Success" : "Failed"],
         speed: 1,
       });
       socket.connect();
@@ -58,7 +58,7 @@ let connect = () => {
 
 let disconnect = () => {
      $('.terminal').typeIt({
-        strings: ["Closing rover connection", (window.state) ? "Success" : "Failed"],
+        strings: ["Closing rover connection", (state) ? "Success" : "Failed"],
         speed: 1
       });
       socket.disconnect();
@@ -83,7 +83,7 @@ let refreshMap = () => {
 
 let left = () => {
     addLog();
-    let strings =  ["Sending left turn command", "waiting for rover response",  (window.state) ? "Success" : "Failed"];
+    let strings =  ["Sending left turn command", "waiting for rover response",  (state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
          strings: strings,
          speed: 10
@@ -95,7 +95,7 @@ let left = () => {
 };
 
 let right = () => {
-    let strings = ["Sending right turn command", "waiting for rover response", (window.state) ? "Success" : "Failed"];
+    let strings = ["Sending right turn command", "waiting for rover response", (state) ? "Success" : "Failed"];
     addLog();
     $('.terminal').typeIt({
          strings: strings,
@@ -107,7 +107,7 @@ let right = () => {
 
 let forwards = () => {
      addLog();
-     let strings = ["Sending drive command", "waiting for rover response", (window.state) ? "Success" : "Failed"];
+     let strings = ["Sending drive command", "waiting for rover response", (state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
         strings: strings,
         speed: 10
@@ -119,7 +119,7 @@ let forwards = () => {
 
 let reverse = () => {
      addLog();
-     let strings = ["Sending reverse command", "waiting for rover response", (window.state) ? "Success" : "Failed"];
+     let strings = ["Sending reverse command", "waiting for rover response", (state) ? "Success" : "Failed"];
     $('.terminal').typeIt({
         strings: strings,
         speed: 10
@@ -168,18 +168,14 @@ let getHeading = () => {
 // poll the heading data on the rover every 3 seconds
 setInterval(getDistance, 1500);
 setInterval(getHeading, 1000);
-var heading;
-var distance;
 
 socket.on('distance', data => {
-    document.getElementById('distance').innerHTML = "Distance: "+ data.distance;
     distance = data.distance;
 });
 
 
 socket.on('heading', data => {
     heading = data.heading;
-    document.getElementById('heading').innerHTML = "Heading: "+ data.heading;
     plotter(heading, distance);
     rover.update(heading);
 });
