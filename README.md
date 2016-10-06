@@ -17,7 +17,7 @@ cd server/
 ```
 Start the server
 ```bash
-npm run
+npm start
 ```
 Visit the webpage on localhost:3000 and choose your arduino COM port and you're ready to go!
 
