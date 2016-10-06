@@ -4,7 +4,11 @@
   "description": "websocket controlled arduino robot",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
+  },
+  "repository" :
+  { "type" : "git"
+  , "url" : "https://github.com/Bfindlay/Arduino-Rover.git"
   },
   "keywords": [
     "arduino",
