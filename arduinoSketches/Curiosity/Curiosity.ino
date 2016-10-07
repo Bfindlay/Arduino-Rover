@@ -162,7 +162,6 @@ void distance(){
   bt.print("'}");
 }
 
-
 void left(){
     bt.println("{'direction': 'left'}");
     servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
