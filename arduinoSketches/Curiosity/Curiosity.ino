@@ -1,9 +1,9 @@
 #include <SoftwareSerial.h>                     // Software Serial Port
 #include <Servo.h>  
-
+#include "Delay.h" 
 //A4 -> SDA
 //A5 ->SCL
-
+NonBlockDelay d; 
 SoftwareSerial bt(2,3);  //TX | RX
 
 /**** SERVO ****/               
@@ -23,10 +23,14 @@ long duration, cm;
 /* Assign a unique ID to this sensor at the same time */
 Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
 
-
+char dir = 'F';
+char c;
+int dist;
+int distLeft;
+int distRight;
 
 void setup() {
-  
+  Serial.begin(9600);
   /* Initialise the sensor */
   if(!mag.begin())
   {
@@ -50,11 +54,39 @@ void setup() {
 
  
 }
+void loop() {
 
-char dir;
-int dist;
+  check();
+  Serial.println(dir);
+  if (d.Timeout()) {  
+    Move();
+    d.Delay(500);
+  }   
+
+  
+ }
+
+void check(){
+  if (distance() > 0 && distance() < 5){
+    Serial.println("----------------------------");
+    Serial.println("Reversing");
+    dir = 'B';
+  }
+   if (distance() > 5 && distance() < 10){
+    Serial.println("----------------------------");
+    Serial.println("STOPPING");
+    dir = 'S';
+  }
+//   if (distance() >10){
+//    Serial.println("----------------------------");
+//    Serial.println("Forward");
+//    dir = 'F';
+//  }
+  
+    
+}
+
 void readSerial(){
-    char c;
    if(bt.available()){ // Checks whether data is comming from the serial port
       c = bt.read();
       switch (c) {
@@ -79,32 +111,24 @@ void readSerial(){
     }
   }
 }
-void loop() {
 
-    readSerial();
-    distance();
-    if(dist < 10){
-      dir = 'R';
-    }else{
-      dir = 'F';
-    }
-    Move();
-
-  
- }
 
 void Move(){
   switch(dir) {
     case 'F':
+      Serial.println("forward");
       forward();
       break;
     case 'B':
+      Serial.println("Reverse");
       reverse();
       break;
     case 'L':
+      Serial.println("Left");
       left();
       break;
     case 'R':
+      Serial.println("right");
       right();
       break;
   }
@@ -143,7 +167,7 @@ void compass(){
 
 }
 
-void distance(){
+int distance(){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(5);
   digitalWrite(trigPin, HIGH);
@@ -160,9 +184,13 @@ void distance(){
   bt.print("{'distance': '");
   bt.print(cm);
   bt.print("'}");
+  return cm;
 }
 
+
 void left(){
+  Serial.println("left");
+  dir = 'L';
     bt.println("{'direction': 'left'}");
     servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
     servoRight.writeMicroseconds(1300);        // Right wheel clockwise
@@ -170,28 +198,35 @@ void left(){
 }
 
 void right(){
+  dir = 'R';
+  Serial.println("right");
     bt.println("{'direction': 'right'}");
     servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
     servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
 }
 
 void forward(){
+  
+  
+  dir = 'F';
     
     compass();
     bt.println("{'direction': 'forward'}");
     servoLeft.writeMicroseconds(1600);        
     servoRight.writeMicroseconds(1200);
-      
+    
 }
 
 void reverse(){
+  dir = 'B';
+    Serial.println("reverse");
     bt.println("{'direction': 'backwards'}");
     servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
     servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise  
 }
 
 void STOP(){
+  dir = 'S';
   servoLeft.writeMicroseconds(1500);         // stop left
   servoRight.writeMicroseconds(1500);
 }
-
