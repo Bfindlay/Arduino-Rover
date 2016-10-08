@@ -4,11 +4,13 @@
 //A4 -> SDA
 //A5 ->SCL
 NonBlockDelay d; 
+NonBlockDelay search;
 SoftwareSerial bt(2,3);  //TX | RX
 
 /**** SERVO ****/               
 Servo servoRight;
 Servo servoLeft;
+Servo scanner;
 
 /******* RANGEFINDER **********/
 int trigPin = 8;    //Trig - green Jumper
@@ -28,7 +30,7 @@ char c;
 int dist;
 int distLeft;
 int distRight;
-
+bool avoiding = false;
 void setup() {
   Serial.begin(9600);
   /* Initialise the sensor */
@@ -51,11 +53,17 @@ void setup() {
   // Add servos to pins 12 and 13
   servoRight.attach(12); 
   servoLeft.attach(13);
+  scanner.attach(10);
+  scanner.write(90);
 
+  
  
 }
 void loop() {
 
+  while(avoiding){
+    avoid();
+  }
   check();
   Serial.println(dir);
   if (d.Timeout()) {  
@@ -69,23 +77,36 @@ void loop() {
 void check(){
   if (distance() > 0 && distance() < 5){
     Serial.println("----------------------------");
-    Serial.println("Reversing");
-    dir = 'B';
+    Serial.println("Avoiding");
+    avoiding = true;
+    avoid();
   }
-   if (distance() > 5 && distance() < 10){
-    Serial.println("----------------------------");
-    Serial.println("STOPPING");
-    dir = 'S';
-  }
-//   if (distance() >10){
-//    Serial.println("----------------------------");
-//    Serial.println("Forward");
-//    dir = 'F';
-//  }
-  
     
 }
 
+void avoid(){
+
+  //DELAY ALLOWED BECAUSE STOPPED
+  if(search.Timeout()){
+    Serial.println("Scanning");
+    reverse();
+    delay(100);
+    scanner.write(10);
+    distLeft = distance();
+    delay(500);
+    scanner.write(179);
+    distRight = distance();
+    delay(500);
+    scanner.write(90);
+    avoiding = false;
+    Serial.println("Search done");
+     dir = (distLeft > distRight) ? 'L' : 'R';
+     Move();
+     search.Delay(600);
+  }
+  dir = 'F';
+  
+}
 void readSerial(){
    if(bt.available()){ // Checks whether data is comming from the serial port
       c = bt.read();
@@ -168,11 +189,13 @@ void compass(){
 }
 
 int distance(){
+
   digitalWrite(trigPin, LOW);
   delayMicroseconds(5);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
+  
   // Read the signal from the sensor: a HIGH pulse whose
   // duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
@@ -212,7 +235,7 @@ void forward(){
     
     compass();
     bt.println("{'direction': 'forward'}");
-    servoLeft.writeMicroseconds(1600);        
+    servoLeft.writeMicroseconds(1700);        
     servoRight.writeMicroseconds(1200);
     
 }
