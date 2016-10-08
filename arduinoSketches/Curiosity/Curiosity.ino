@@ -81,7 +81,6 @@ void check(){
     avoiding = true;
     avoid();
   }
-    
 }
 
 void avoid(){
