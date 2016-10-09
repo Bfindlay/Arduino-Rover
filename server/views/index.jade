@@ -40,19 +40,20 @@ block content
                 connect();
             $('#ports').css('display','none');
         }
+        let modeSet = () => {
+            socket.emit('mode', $('#mode').prop('checked'));
+        }
     .row
+        .small-12.large-12.columns.contain
+            section.model-13
+                .checkbox(id='modeSet')
+                    input(id='mode' name='mode' type='checkbox' onclick='modeSet()')
+                    label 
         .small-12.large-12.columns.contain
             a(class="alert button" onclick='STOP()') Stop
             a(class="success button" onclick='connect()') Connect
             a(class="alert button" onclick='disconnect()') Disconnect
-            .switch-toggle.switch-3.switch-candy
-                input#on(name='state-d', type='radio', checked='')
-                label(for='on', onclick='') Manual
-                input#na(name='state-d', type='radio', checked='')
-                label(for='na', onclick='') Autonomous
-                input#off(name='state-d', type='radio')
-                label(for='off', onclick='') Semi-Autonomous
-                a
+        .small-12.large-12.columns.contain
             a(class="button small" onclick='clearPlot()' id='clearPlot') Clear Plots
             a(class="button small" onclick='hidePlot()' id='hidePlot') Hide Plots
             a(class="button small" onclick='clearObstacle()' id='clearObstacle') Clear Obstacles

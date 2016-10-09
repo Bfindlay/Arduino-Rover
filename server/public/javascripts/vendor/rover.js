@@ -166,9 +166,9 @@ let getHeading = () => {
     socket.emit('data', 'H');
 };
 // poll the heading data on the rover every 3 seconds
-setInterval(getDistance, 1500);
-setInterval(getHeading, 1000);
-
+// val(getDistance, 1500);
+// setInterval(getHeading, 1000);
+ 
 socket.on('distance', data => {
     distance = data.distance;
 });
