@@ -53,6 +53,9 @@ let connect = port => {
 				//console.log("data" + data);
 				serialport.write(data);
 			});
+			socket.on('mode', mode => {
+				serialport.write('M');
+			});
 			process.on('uncaughtException', err => {
 				console.log(err);
 			});
@@ -67,7 +70,8 @@ let safeParse = data => {
 	try {
 		return JSON.parse(data.toString().replace(/\s/g, '').replace(/'/g, '"'));
 	} catch (e) {
-		console.log("parse error", e);
+		// Ignore 
+		//console.log("parse error", e);
 	}
 };
 
