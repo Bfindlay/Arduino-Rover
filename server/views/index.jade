@@ -17,7 +17,7 @@ block content
             console.log("received data",data);
         });
         socket.on('return', data =>  {
-            document.getElementById('distance').value = data;
+            //document.getElementById('distance').value = data;
         });
         socket.on('ports', data => {
             if(!data.length > 0){

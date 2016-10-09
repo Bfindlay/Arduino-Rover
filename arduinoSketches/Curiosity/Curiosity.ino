@@ -5,6 +5,7 @@
 //A5 ->SCL
 NonBlockDelay d; 
 NonBlockDelay search;
+NonBlockDelay inner;
 SoftwareSerial bt(2,3);  //TX | RX
 
 /**** SERVO ****/               
@@ -32,12 +33,12 @@ int distLeft;
 int distRight;
 bool avoiding = false;
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   /* Initialise the sensor */
   if(!mag.begin())
   {
     /* There was a problem detecting the HMC5883 ... check your connections */
-    Serial.println("Ooops, no HMC5883 detected");
+    //Serial.println("Ooops, no HMC5883 detected");
     while(1);
   }
   
@@ -61,24 +62,22 @@ void setup() {
 }
 void loop() {
 
-  while(avoiding){
-    avoid();
-  }
-  check();
-  Serial.println(dir);
   if (d.Timeout()) {  
     Move();
-    d.Delay(500);
+    d.Delay(100);
     //THis runs every 0.5 seconds
     } 
     //this runs continuously
+    check();
+    readSerial();
+   // Serial.println(dir);
   
  }
 
 void check(){
-  if (distance() > 0 && distance() < 5){
-    Serial.println("----------------------------");
-    Serial.println("Avoiding");
+  if (distance() > 0 && distance() < 10){
+    //Serial.println("----------------------------");
+    //Serial.println("Avoiding");
     avoiding = true;
     avoid();
   }
@@ -88,9 +87,8 @@ void avoid(){
 
   //DELAY ALLOWED BECAUSE STOPPED
   if(search.Timeout()){
-    Serial.println("Scanning");
-    reverse();
-    delay(100);
+    //Serial.println("Scanning");
+    STOP();
     scanner.write(10);
     distLeft = distance();
     delay(500);
@@ -99,10 +97,11 @@ void avoid(){
     delay(500);
     scanner.write(90);
     avoiding = false;
-    Serial.println("Search done");
-     dir = (distLeft > distRight) ? 'L' : 'R';
-     Move();
-     search.Delay(600);
+    //Serial.println("Search done");
+    reverse();
+    delay(250);
+    (distLeft > distRight) ? left() : right();
+    delay(250);
   }
   dir = 'F';
   
@@ -137,23 +136,69 @@ void readSerial(){
 void Move(){
   switch(dir) {
     case 'F':
-      Serial.println("forward");
+      //Serial.println("forward");
       forward();
       break;
     case 'B':
-      Serial.println("Reverse");
+      //Serial.println("Reverse");
       reverse();
       break;
     case 'L':
-      Serial.println("Left");
+      //Serial.println("Left");
       left();
       break;
     case 'R':
-      Serial.println("right");
+      //Serial.println("right");
       right();
       break;
   }
 }
+
+
+void left(){
+  //Serial.println("left");
+    dir = 'L';
+    bt.println("{'direction': 'left'}");
+    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+    servoRight.writeMicroseconds(1300);        // Right wheel clockwise
+
+}
+
+void right(){
+  dir = 'R';
+  //Serial.println("right");
+    bt.println("{'direction': 'right'}");
+    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
+    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
+}
+
+void forward(){
+  
+  
+  dir = 'F';
+    
+    compass();
+    bt.println("{'direction': 'forward'}");
+    servoLeft.writeMicroseconds(1700);        
+    servoRight.writeMicroseconds(1100);
+    
+}
+
+void reverse(){
+  dir = 'B';
+    //Serial.println("reverse");
+    bt.println("{'direction': 'backwards'}");
+    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
+    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise  
+}
+
+void STOP(){
+  //Serial.println("Stopped");
+  dir = 'S';
+  servoLeft.writeMicroseconds(1500);         // stop left
+  servoRight.writeMicroseconds(1500);
+}
+
 void compass(){
    /* Get a new sensor event */ 
   sensors_event_t event; 
@@ -210,46 +255,3 @@ int distance(){
   return cm;
 }
 
-
-void left(){
-  Serial.println("left");
-  dir = 'L';
-    bt.println("{'direction': 'left'}");
-    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
-    servoRight.writeMicroseconds(1300);        // Right wheel clockwise
-
-}
-
-void right(){
-  dir = 'R';
-  Serial.println("right");
-    bt.println("{'direction': 'right'}");
-    servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
-    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
-}
-
-void forward(){
-  
-  
-  dir = 'F';
-    
-    compass();
-    bt.println("{'direction': 'forward'}");
-    servoLeft.writeMicroseconds(1700);        
-    servoRight.writeMicroseconds(1200);
-    
-}
-
-void reverse(){
-  dir = 'B';
-    Serial.println("reverse");
-    bt.println("{'direction': 'backwards'}");
-    servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
-    servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise  
-}
-
-void STOP(){
-  dir = 'S';
-  servoLeft.writeMicroseconds(1500);         // stop left
-  servoRight.writeMicroseconds(1500);
-}
