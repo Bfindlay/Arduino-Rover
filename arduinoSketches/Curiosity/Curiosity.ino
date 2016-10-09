@@ -69,8 +69,9 @@ void loop() {
   if (d.Timeout()) {  
     Move();
     d.Delay(500);
-  }   
-
+    //THis runs every 0.5 seconds
+    } 
+    //this runs continuously
   
  }
 
