@@ -71,7 +71,6 @@ let safeParse = data => {
 		return JSON.parse(data.toString().replace(/\s/g, '').replace(/'/g, '"'));
 	} catch (e) {
 		// Ignore 
-		//console.log("parse error", e);
 	}
 };
 

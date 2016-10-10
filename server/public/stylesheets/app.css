@@ -357,15 +357,17 @@ a:hover .left:after, a:hover .top:after, a:hover .bottom:after, a:hover .right:a
 }
 
 .model-13 .checkbox:after {
-
+   content: "OFF";
   font-family: Arial;
   position: absolute;
   color: #666;
   top: 12px;
   right: 15px;
+  padding-right: 1em;
+  padding-bottom: 1em;
 }
 .model-13 .checkbox label {
-  background: none;
+  background: red;
   border: 3px solid #777;
   height: 40px;
   border-radius: 20px;

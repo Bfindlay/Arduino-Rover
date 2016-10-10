@@ -68,7 +68,7 @@ void loop() {
     if (d.Timeout()) {
       Move();
       d.Delay(100);
-      //THis runs every 0.5 seconds
+      //THis runs every 0.1 seconds
     }
     //this runs continuously
     check();
@@ -103,7 +103,7 @@ void avoid() {
     //Serial.println("Search done");
     reverse();
     delay(250);
-    (distLeft > distRight) ? left() : right();
+    (distLeft >= distRight) ? left() : right();
     delay(250);
   }
   dir = 'F';
