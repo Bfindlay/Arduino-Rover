@@ -11,9 +11,14 @@ Clone the project
 ```bash
 git clone 
 ```
+
 Change to the server directory
 ```bash
 cd server/
+```
+Install dependencies 
+```bash
+npm install
 ```
 Start the server
 ```bash
