@@ -2,7 +2,22 @@
 
 let logs = [];
 
+let locked = false;
 
+
+let emitter = (type, data) => {
+    return new Promise(function(resolve, reject) {
+        if(locked)
+            reject('buffer is full');
+
+        locked  = true;
+        socket.emit(type, data);
+        socket.on('return', data => {
+            resolve(data);
+            });
+        });
+    
+};
 
 document.addEventListener("keydown",e  => {
     if(e.key == "ArrowRight"){
@@ -44,7 +59,11 @@ let STOP = () => {
         strings: ["Stopping rover", (state) ? "Success" : "Failed"],
         speed: 1
       });
-    socket.emit('data', 'S');
+    //socket.emit('data', 'S');
+    emitter('data','S').then(function(result){
+        console.log(result);
+        locked = false;
+    }).catch(err => console.log(err));
 };
 
 let connect = () => {
