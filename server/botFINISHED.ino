@@ -89,9 +89,9 @@ void check() {
   
   /***** EDGE DETECTOR READING *******/
    unsigned int detector = analogRead(A0);
-    if(detector < 510){
+    if(detector < 500){
       reverse();
-      delay(750);
+      delay(500);
       avoid();
     }
 
@@ -300,4 +300,3 @@ void lookCenter(){
   scanner.write(90);
   delay(300);
 }
-
