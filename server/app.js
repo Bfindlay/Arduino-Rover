@@ -1,5 +1,5 @@
 'use strict';
-
+// v1.0.0
 let express = require('express');
 let app = express();
 let path = require('path');
@@ -35,7 +35,7 @@ let connect = port => {
 			socket.emit('connected');
 			serialport.on('data', data => {
 				let result = safeParse(new Buffer(data));
-				//console.log(result);
+				console.log(result);
 				if (result !== undefined) {
 					if (result.heading !== undefined) {
 						socket.emit('heading', result);
@@ -50,7 +50,7 @@ let connect = port => {
 				console.log(err);
 			});
 			socket.on('data', data => {
-				//console.log("data" + data);
+				console.log("data" + data);
 				serialport.write(data);
 			});
 			socket.on('mode', mode => {

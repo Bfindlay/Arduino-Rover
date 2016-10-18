@@ -13,6 +13,9 @@ Servo servoRight;
 Servo servoLeft;
 Servo scanner;
 
+
+/****** IR SENSOR *******/
+
 /******* RANGEFINDER **********/
 int trigPin = 8;    //Trig - green Jumper
 int echoPin = 9;    //Echo - yellow Jumper
@@ -33,6 +36,7 @@ int distLeft;
 int distRight;
 bool avoiding = false;
 bool Auto = true;
+
 void setup() {
   //Serial.begin(9600);
   /* Initialise the sensor */
@@ -42,6 +46,9 @@ void setup() {
     //Serial.println("Ooops, no HMC5883 detected");
     while (1);
   }
+
+  /*** IR SENSOR ****/
+  pinMode(A0, INPUT); // IR SENSOR
 
   pinMode(2, INPUT); //RX
   pinMode(3, OUTPUT); //TX
@@ -56,14 +63,12 @@ void setup() {
   servoRight.attach(12);
   servoLeft.attach(13);
   scanner.attach(10);
-  scanner.write(90);
 
   pinMode(7, OUTPUT);
   digitalWrite(7, HIGH);
 
 }
 void loop() {
-
   if (Auto) {
     if (d.Timeout()) {
       Move();
@@ -78,6 +83,15 @@ void loop() {
 }
 
 void check() {
+  
+   unsigned int detector = analogRead(A0);
+    //Serial.println(detector);
+    //Serial.println(dist);
+//  if(detector < 500){
+//    reverse();
+//    delay(500);
+//    avoid();
+//  }
   if (distance() > 0 && distance() < 10) {
     //Serial.println("----------------------------");
     //Serial.println("Avoiding");
@@ -92,13 +106,24 @@ void avoid() {
   if (search.Timeout()) {
     //Serial.println("Scanning");
     STOP();
-    scanner.write(10);
+    scanner.write(0);
+    delay(150);
+    scanner.write(90);
     distLeft = distance();
     delay(500);
-    scanner.write(179);
-    distRight = distance();
-    delay(500);
+    scanner.write(180);
+    delay(150);
     scanner.write(90);
+    delay(50);
+    scanner.write(180);
+    delay(150);
+    scanner.write(90);
+    distRight = distance();
+    delay(150);
+    scanner.write(0);
+    delay(150);
+    scanner.write(90);
+    delay(500);
     avoiding = false;
     //Serial.println("Search done");
     reverse();
