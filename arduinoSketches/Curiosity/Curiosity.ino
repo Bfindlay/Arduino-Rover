@@ -83,21 +83,19 @@ void loop() {
     digitalWrite(7, LOW);
   }
   readSerial();
-
 }
 
 void check() {
   
   /***** EDGE DETECTOR READING *******/
    unsigned int detector = analogRead(A0);
-    if(detector < 510){
+    if(detector < 500){
       reverse();
-      delay(750);
+      delay(500);
       avoid();
     }
 
   /***** DISTANCE SENSOR READING *******/
-
   if (distance() > 0 && distance() < 6) {
     avoiding = true;
     avoid();
@@ -109,7 +107,6 @@ void avoid() {
   if (search.Timeout()) {
     STOP();
     // Look left and measure distance
-
     lookLeft();
     distLeft = distance();
     // Look right and measure distance
@@ -192,7 +189,7 @@ void Move() {
 void left() {
   //Serial.println("left");
   dir = 'L';
-  bt.println("{'dir': 'left'}");
+  bt.println("{'direction': 'left'}");
   servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
   servoRight.writeMicroseconds(1300);        // Right wheel clockwise
 
@@ -201,7 +198,7 @@ void left() {
 void right() {
   dir = 'R';
   //Serial.println("right");
-  bt.println("{'dir': 'right'}");
+  bt.println("{'direction': 'right'}");
   servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
   servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
 }
@@ -213,7 +210,7 @@ void forward() {
 
   compass();
   distance();
-  bt.println("{'dir': 'forward'}");
+  bt.println("{'direction': 'forward'}");
   servoLeft.writeMicroseconds(1700);
   servoRight.writeMicroseconds(1100);
 
@@ -222,7 +219,7 @@ void forward() {
 void reverse() {
   dir = 'B';
   //Serial.println("reverse");
-  bt.println("{'dir': 'backwards'}");
+  bt.println("{'direction': 'backwards'}");
   servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
   servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
 }
@@ -262,7 +259,7 @@ void compass() {
 
   //Serial.print("Heading (degrees): "); Serial.println(headingDegrees);
   // send heading to control arduino
-  bt.print("{'head': '");
+  bt.print("{'heading': '");
   bt.print(headingDegrees);
   bt.print("'}");
 
@@ -284,7 +281,7 @@ int distance() {
   // convert the time into a distance
   cm = (duration / 2) / 29.1;
   dist = cm;
-  bt.print("{'dis': '");
+  bt.print("{'distance': '");
   bt.print(cm);
   bt.print("'}");
   return cm;
@@ -303,4 +300,3 @@ void lookCenter(){
   scanner.write(90);
   delay(300);
 }
-
