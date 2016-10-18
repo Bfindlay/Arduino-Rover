@@ -43,7 +43,6 @@ void setup() {
   if (!mag.begin())
   {
     /* There was a problem detecting the HMC5883 ... check your connections */
-    //Serial.println("Ooops, no HMC5883 detected");
     while (1);
   }
 
@@ -64,6 +63,7 @@ void setup() {
   servoLeft.attach(13);
   scanner.attach(10);
 
+  // MODE LED
   pinMode(7, OUTPUT);
   digitalWrite(7, HIGH);
 
@@ -75,26 +75,27 @@ void loop() {
       d.Delay(100);
       //THis runs every 0.1 seconds
     }
+    digitalWrite(7, HIGH);
     //this runs continuously
     check();
+  }else{
+    digitalWrite(7, LOW);
   }
-  readSerial();
-
+  readSerial()
 }
 
 void check() {
   
+  /***** EDGE DETECTOR READING *******/
    unsigned int detector = analogRead(A0);
-    //Serial.println(detector);
-    //Serial.println(dist);
-//  if(detector < 500){
-//    reverse();
-//    delay(500);
-//    avoid();
-//  }
+    if(detector < 500){
+      reverse();
+      delay(500);
+      avoid();
+    }
+
+  /***** DISTANCE SENSOR READING *******/
   if (distance() > 0 && distance() < 10) {
-    //Serial.println("----------------------------");
-    //Serial.println("Avoiding");
     avoiding = true;
     avoid();
   }
@@ -102,32 +103,24 @@ void check() {
 
 void avoid() {
 
-  //DELAY ALLOWED BECAUSE STOPPED
   if (search.Timeout()) {
-    //Serial.println("Scanning");
     STOP();
-    scanner.write(0);
+    // Look left and measure distance
+    scanner.write(10);
     delay(150);
-    scanner.write(90);
     distLeft = distance();
-    delay(500);
-    scanner.write(180);
     delay(150);
-    scanner.write(90);
-    delay(50);
-    scanner.write(180);
+    // Look right and measure distance
+    scanner.write(170);
     delay(150);
-    scanner.write(90);
     distRight = distance();
     delay(150);
-    scanner.write(0);
-    delay(150);
+    // Reset scanner to center position
     scanner.write(90);
-    delay(500);
     avoiding = false;
-    //Serial.println("Search done");
     reverse();
     delay(250);
+    // Choose best direction to travel
     (distLeft >= distRight) ? left() : right();
     delay(250);
   }
@@ -200,7 +193,7 @@ void Move() {
 void left() {
   //Serial.println("left");
   dir = 'L';
-  bt.println("{'direction': 'left'}");
+  bt.println("{'dir': 'left'}");
   servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
   servoRight.writeMicroseconds(1300);        // Right wheel clockwise
 
@@ -209,7 +202,7 @@ void left() {
 void right() {
   dir = 'R';
   //Serial.println("right");
-  bt.println("{'direction': 'right'}");
+  bt.println("{'dir': 'right'}");
   servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
   servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
 }
@@ -221,7 +214,7 @@ void forward() {
 
   compass();
   distance();
-  bt.println("{'direction': 'forward'}");
+  bt.println("{'dir': 'forward'}");
   servoLeft.writeMicroseconds(1700);
   servoRight.writeMicroseconds(1100);
 
@@ -230,7 +223,7 @@ void forward() {
 void reverse() {
   dir = 'B';
   //Serial.println("reverse");
-  bt.println("{'direction': 'backwards'}");
+  bt.println("{'dir': 'backwards'}");
   servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
   servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
 }
@@ -270,7 +263,7 @@ void compass() {
 
   //Serial.print("Heading (degrees): "); Serial.println(headingDegrees);
   // send heading to control arduino
-  bt.print("{'heading': '");
+  bt.print("{'head': '");
   bt.print(headingDegrees);
   bt.print("'}");
 
@@ -292,9 +285,8 @@ int distance() {
   // convert the time into a distance
   cm = (duration / 2) / 29.1;
   dist = cm;
-  bt.print("{'distance': '");
+  bt.print("{'dis': '");
   bt.print(cm);
   bt.print("'}");
   return cm;
 }
-

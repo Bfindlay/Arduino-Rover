@@ -37,9 +37,9 @@ let connect = port => {
 				let result = safeParse(new Buffer(data));
 				console.log(result);
 				if (result !== undefined) {
-					if (result.heading !== undefined) {
+					if (result.head !== undefined) {
 						socket.emit('heading', result);
-					} else if (result.distance !== undefined) {
+					} else if (result.dis !== undefined) {
 						socket.emit('distance', result);
 					} else {
 						socket.emit('return', result); //  direction object
@@ -88,6 +88,6 @@ servers.listen(process.env.port || 3000, function() {
 	console.log("Server Running");
 });
 
-app.post('/port', function(req, res){
+app.post('/api/port', function(req, res){
 	connect(req.body.data);
 });

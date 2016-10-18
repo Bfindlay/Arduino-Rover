@@ -59,11 +59,7 @@ let STOP = () => {
         strings: ["Stopping rover", (state) ? "Success" : "Failed"],
         speed: 1
       });
-    //socket.emit('data', 'S');
-    emitter('data','S').then(function(result){
-        console.log(result);
-        locked = false;
-    }).catch(err => console.log(err));
+    socket.emit('data', 'S');
 };
 
 let connect = () => {
@@ -188,12 +184,12 @@ let getHeading = () => {
 // val(getDistance, 1500);
 // setInterval(getHeading, 1000);
  
-socket.on('distance', data => {
+socket.on('dist', data => {
     distance = data.distance;
 });
 
 
-socket.on('heading', data => {
+socket.on('head', data => {
     heading = data.heading;
     plotter(heading, distance);
     rover.update(heading);
