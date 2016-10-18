@@ -2,3 +2,4 @@
 .log
 *.log
 /server/node_modules
+.eslintrc
