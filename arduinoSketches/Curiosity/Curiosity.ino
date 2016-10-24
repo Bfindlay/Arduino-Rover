@@ -92,6 +92,10 @@ void check() {
     if(detector < 500){
       reverse();
       delay(500);
+      STOP();
+      right();
+      delay(250);
+      forward();
       avoid();
     }
 
