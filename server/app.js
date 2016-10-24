@@ -1,5 +1,5 @@
 'use strict';
-// v1.0.0
+
 let express = require('express');
 let app = express();
 let path = require('path');
@@ -35,11 +35,11 @@ let connect = port => {
 			socket.emit('connected');
 			serialport.on('data', data => {
 				let result = safeParse(new Buffer(data));
-				console.log(result);
+				//console.log(result);
 				if (result !== undefined) {
-					if (result.head !== undefined) {
+					if (result.heading !== undefined) {
 						socket.emit('heading', result);
-					} else if (result.dis !== undefined) {
+					} else if (result.distance !== undefined) {
 						socket.emit('distance', result);
 					} else {
 						socket.emit('return', result); //  direction object
@@ -50,7 +50,7 @@ let connect = port => {
 				console.log(err);
 			});
 			socket.on('data', data => {
-				console.log("data" + data);
+				//console.log("data" + data);
 				serialport.write(data);
 			});
 			socket.on('mode', mode => {
@@ -88,6 +88,6 @@ servers.listen(process.env.port || 3000, function() {
 	console.log("Server Running");
 });
 
-app.post('/api/port', function(req, res){
+app.post('/port', function(req, res){
 	connect(req.body.data);
 });
