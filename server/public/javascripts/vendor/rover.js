@@ -1,197 +1,94 @@
-'use strict';
 
-let logs = [];
-
-let locked = false;
-
-
-let emitter = (type, data) => {
-    return new Promise(function(resolve, reject) {
-        if(locked)
-            reject('buffer is full');
-
-        locked  = true;
-        socket.emit(type, data);
-        socket.on('return', data => {
-            resolve(data);
-            });
-        });
-    
-};
-
-document.addEventListener("keydown",e  => {
-    if(e.key == "ArrowRight"){
-        $('.right').css('border', '0.5em solid #e74c3c');
-        right();
-        setTimeout(() => {
-            $('.right').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
-        },150);
-    }else if(e.key == "ArrowLeft"){
-        $('.left').css('border', '0.5em solid #e74c3c');
-        left();
-        setTimeout(() => {
-            $('.left').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
-        },150);
-    }else if(e.key == "ArrowUp"){
-        $('.top').css('border', '0.5em solid #e74c3c');
-        forwards();
-        setTimeout(() => {
-            $('.top').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
-        },150);
-    }else if(e.key == "ArrowDown"){
-        $('.bottom').css('border', '0.5em solid #e74c3c');
-        reverse();
-        setTimeout(() => {
-            $('.bottom').css('border', '0.5em solid rgba(31, 240, 66, 0.75)');
-        },150);
-    }
-});
-
-(() => {
+var logs = [];
+(function(){
       $('.terminal').typeIt({
-     strings: ['Rover awaiting Initialisation'],
-     speed: 1,
+     strings: ['Initialising rover uplink','Rover uplink connection Successful', "rover is ready"],
+     speed: 50,
     });
 })();
 
-let STOP = () => {
-    $('.terminal').typeIt({
-        strings: ["Stopping rover", (state) ? "Success" : "Failed"],
-        speed: 1
-      });
-    socket.emit('data', 'S');
-};
 
-let connect = () => {
+var connect = function(){
      $('.terminal').typeIt({
-        strings: ["Establishing uplink connection to rover ","Initialising .........." ,(state) ? "Success" : "Failed"],
-        speed: 1,
+        strings: ["Establishing uplink connection to rover ","Initialising .........." ,"success"],
+        typeSpeed: 2
       });
       socket.connect();
       addLog();
 };
-
-let disconnect = () => {
+var disconnect = function(){
      $('.terminal').typeIt({
-        strings: ["Closing rover connection", (state) ? "Success" : "Failed"],
-        speed: 1
+        strings: ["Closing rover connection", "success"],
+        typeSpeed: 2
       });
       socket.disconnect();
       addLog();
 };
 
-let refreshLogs = () => {
+var refreshLogs = function(){
     $(".terminal").typeIt({
         strings: ["Refreshing logs", "please wait"],
-        speed: 10
+        typeSpeed: 2
       });
       logs = [];
 };
 
-let refreshMap = () => {
+var refreshMap = function(){
     $('.terminal').typeIt({
         strings: ["Refreshing Map", "please wait"],
-        speed: 10
+        typeSpeed: 2
       });
       addLog();
 }
 
-let left = () => {
+var left = function(){
     addLog();
-    let strings =  ["Sending left turn command", "waiting for rover response",  (state) ? "Success" : "Failed"];
+    var strings =  ["Sending left turn command", "waiting for rover response", "failed"];
     $('.terminal').typeIt({
          strings: strings,
-         speed: 10
+        typeSpeed: 2
       });
-      console.log("sending LEFT data");
-      socket.emit('data', 'L');
+      console.log("sending data");
+      socket.emit('data', 10);
       logs.push(strings);
       
 };
 
-let right = () => {
-    let strings = ["Sending right turn command", "waiting for rover response", (state) ? "Success" : "Failed"];
+var right = function(){
+    var strings = ["Sending right turn command", "waiting for rover response", "failed"];
     addLog();
     $('.terminal').typeIt({
          strings: strings,
-        speed: 10
+        typeSpeed: 1
       });
-      socket.emit('data', 'R');
       logs.push(strings);
-};
 
-let forwards = () => {
+}
+
+var forwards = function(){
      addLog();
-     let strings = ["Sending drive command", "waiting for rover response", (state) ? "Success" : "Failed"];
+     var strings = ["Sending drive command", "waiting for rover response", "failed"];
     $('.terminal').typeIt({
         strings: strings,
-        speed: 10
+        typeSpeed: 10
       });
-      socket.emit('data', 'F');
       logs.push(strings);
       
 }
 
-let reverse = () => {
+var reverse = function(){
      addLog();
-     let strings = ["Sending reverse command", "waiting for rover response", (state) ? "Success" : "Failed"];
+     var strings = ["Sending reverse command", "waiting for rover response", "failed"];
     $('.terminal').typeIt({
         strings: strings,
-        speed: 10
+        typeSpeed: 2
       });
-      socket.emit('data', "B");
       logs.push(strings);
 }
 
-let addLog = () => {
+var addLog = function(){
     if(logs.length > 0){
         $("ul").append("<li> >" +logs.pop()+"</li>");
        $('.terminal-Logs').animate({scrollTop: $('.terminal-Logs').prop("scrollHeight")}, 500);
     }
 };
-
-let hideObstacle = () => {
-    if(displayDetected){
-         $('#hideObstacle').text('Hide Obstacles');
-    }else{
-        $('#hideObstacle').text('Show Obstacles');
-    }
-    displayDetected = !displayDetected;
-};
-let clearObstacle = () => { 
-    detected = [];
-};
-let hidePlot = () => {
-    if(display){
-        $('#hidePlot').text('Hide Plots');
-    }else{
-        $('#hidePlot').text('Show Plots');
-    }
-    display = !display;
-};
-
-let clearPlot = () => { 
-    plots = [];
-};
-let getDistance = () => {
-    socket.emit('data', 'D');
-};
-
-let getHeading = () => {
-    socket.emit('data', 'H');
-};
-// poll the heading data on the rover every 3 seconds
-// val(getDistance, 1500);
-// setInterval(getHeading, 1000);
- 
-socket.on('dist', data => {
-    distance = data.distance;
-});
-
-
-socket.on('head', data => {
-    heading = data.heading;
-    plotter(heading, distance);
-    rover.update(heading);
-});
-

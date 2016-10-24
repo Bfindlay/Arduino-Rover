@@ -32,7 +32,7 @@ block content
             let selected = { data : $('#selector').val()};
             $.ajax({
                 type: "POST",
-                url: '/api/port',
+                url: '/port',
                 data: selected,
                 dataType: "json"
                 });
@@ -95,6 +95,5 @@ block content
             #ports
                 select(id='selector')
                 a(class="success button" onclick='portSelect()') Connect to Port
-
-
-
+    
+      
