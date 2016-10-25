@@ -1,0 +1,46 @@
+Import Libraries for Sensors, Delay and bluetooth
+Desclare and assign global variables for sensors
+Set TX pin to 2, RX pin to 3
+Set pin 8 to trigger, pin 9 to echo for the ultrasonic sensor.
+Assign a unique ID for the compass censor
+
+setup();
+Initialise Serial Monitor
+Attempt to initalise compass sensor
+Assign pinmode for sensors and Servos
+
+loop():
+If auto mode is on, Call move every 100ms
+Check direction and sensor data and transmit data back to master.
+
+check():
+Read Ultrasonic data
+If the values is less than 500
+Call reverse and wait 500ms
+Call Stop, then right and wait 250ms.
+Call forware 
+Call avoid 
+Check distance reading
+
+avoid():
+stop the robot
+make ultrasonic sensor look left
+measure the left distance
+make the ultrasonic sensor look right
+measure the right distance
+reverse slightly
+choose to move left or right based on best result
+move in direction chosen
+set movement back to forward
+
+readSerial():
+read the characters from the serial buffer and store it in a variables
+excecute the appropriate function based on the variables content
+
+modeSet():
+change the state of the rover to or from auto and manual
+
+move():
+read the direction variable 
+call the appropriate movement methods
+
