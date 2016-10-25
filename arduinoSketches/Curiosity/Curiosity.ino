@@ -13,9 +13,6 @@ Servo servoRight;
 Servo servoLeft;
 Servo scanner;
 
-
-/****** IR SENSOR *******/
-
 /******* RANGEFINDER **********/
 int trigPin = 8;    //Trig - green Jumper
 int echoPin = 9;    //Echo - yellow Jumper
@@ -64,12 +61,18 @@ void setup() {
   scanner.attach(10);
 
   scanner.write(90);
+
   // MODE LED
   pinMode(7, OUTPUT);
   digitalWrite(7, HIGH);
 
 }
+/**
+* Main program loop
+*/
+
 void loop() {
+  // If auto mode is on, enter the autonomouse movement loop
   if (Auto) {
     if (d.Timeout()) {
       Move();
@@ -82,6 +85,7 @@ void loop() {
   }else{
     digitalWrite(7, LOW);
   }
+  // Check the bluetooth buffer for any commands
   readSerial();
 }
 
@@ -124,9 +128,15 @@ void avoid() {
     (distLeft >= distRight) ? left() : right();
     delay(250);
   }
+  // Set the direction to forward
   dir = 'F';
 
 }
+
+/**
+* Checks the bluetooth serial buffer for any commands
+* sent to the rover and sets and action 
+*/
 void readSerial() {
   if (bt.available()) { // Checks whether data is comming from the serial port
     c = bt.read();
@@ -156,6 +166,9 @@ void readSerial() {
   }
 }
 
+/**
+* Switches auto mode on or off depending on its state
+*/
 void modeSet() {
   Auto = !Auto;
   if (!Auto) {
@@ -168,30 +181,30 @@ void modeSet() {
 
 }
 
+/**
+* Excecutes the appropriate function based on the current direction state
+*/
 void Move() {
   switch (dir) {
     case 'F':
-      //Serial.println("forward");
       forward();
       break;
     case 'B':
-      //Serial.println("Reverse");
       reverse();
       break;
     case 'L':
-      //Serial.println("Left");
       left();
       break;
     case 'R':
-      //Serial.println("right");
       right();
       break;
   }
 }
 
-
+/**
+* Turns the rover left
+*/
 void left() {
-  //Serial.println("left");
   dir = 'L';
   bt.println("{'direction': 'left'}");
   servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
@@ -199,19 +212,21 @@ void left() {
 
 }
 
+/**
+* Turns the rover right
+*/
 void right() {
   dir = 'R';
-  //Serial.println("right");
   bt.println("{'direction': 'right'}");
   servoLeft.writeMicroseconds(1700);         // Left wheel counterclockwise
   servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
 }
 
+/**
+* Moves the rover forwrd
+*/
 void forward() {
-
-
   dir = 'F';
-
   compass();
   distance();
   bt.println("{'direction': 'forward'}");
@@ -220,21 +235,27 @@ void forward() {
 
 }
 
+/**
+* Moves the robot backwards
+*/
 void reverse() {
   dir = 'B';
-  //Serial.println("reverse");
   bt.println("{'direction': 'backwards'}");
   servoLeft.writeMicroseconds(1300);         // Left wheel clockwise
   servoRight.writeMicroseconds(1700);        // Right wheel counterclockwise
 }
 
+
 void STOP() {
-  //Serial.println("Stopped");
   dir = 'S';
   servoLeft.writeMicroseconds(1500);         // stop left
   servoRight.writeMicroseconds(1500);
 }
 
+/**
+* Calculates the rovers current heading in degrees and sends it to the
+* control arduino via a json string
+*/
 void compass() {
   /* Get a new sensor event */
   sensors_event_t event;
@@ -269,6 +290,10 @@ void compass() {
 
 }
 
+/**
+* Calculates the distance from the rover to an object
+* and then sends the result as a json string to the control arduino
+*/
 int distance() {
 
   digitalWrite(trigPin, LOW);
@@ -291,6 +316,7 @@ int distance() {
   return cm;
 }
 
+/**** Ultrasonic scanner control functions ****/
 void lookLeft(){
   scanner.write(180);
   delay(300);
@@ -304,3 +330,4 @@ void lookCenter(){
   scanner.write(90);
   delay(300);
 }
+
