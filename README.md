@@ -26,5 +26,7 @@ npm start
 ```
 Visit the webpage on localhost:3000 and choose your arduino COM port and you're ready to go!
 
+## Documentation
 
+![alt tag](https://dl.dropboxusercontent.com/u/14297267/Screen%20Shot%202016-10-25%20at%2012.24.53%20PM.png)
 
